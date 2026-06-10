@@ -1,0 +1,4 @@
+.DS_Store
+.claude/
+.notion-export/
+node_modules/
