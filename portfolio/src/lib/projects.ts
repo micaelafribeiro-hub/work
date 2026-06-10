@@ -7,6 +7,8 @@ export type CaseImage = {
 	ratio: '21:9' | '16:9' | '3:2' | '4:3' | '1:1' | '3:4' | '9:16';
 	description: string;
 	caption?: string;
+	/** When set, the actual asset is rendered instead of the placeholder. */
+	src?: string;
 };
 
 export type CaseSection = {

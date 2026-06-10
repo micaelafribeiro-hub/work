@@ -1,8 +1,16 @@
 <script lang="ts">
-	import { projects } from '$lib/projects';
+	import { projects, type Project } from '$lib/projects';
 	import ProjectRow from '$lib/components/ProjectRow.svelte';
+	import HoverPreview from '$lib/components/HoverPreview.svelte';
 
 	const selected = projects.slice(0, 3);
+
+	/* Cursor-following hero-image preview, active only over the
+	   Selected Work list. State lives at the section level so a
+	   single preview element tracks across rows without remounting. */
+	let hovered: Project | null = $state(null);
+	let mouseX = $state(0);
+	let mouseY = $state(0);
 </script>
 
 <svelte:head>
@@ -55,12 +63,23 @@
 		</a>
 	</div>
 
-	<ul class="mt-8 sm:mt-12 flex flex-col">
+	<ul
+		class="mt-8 sm:mt-12 flex flex-col"
+		onmousemove={(e) => {
+			mouseX = e.clientX;
+			mouseY = e.clientY;
+		}}
+		onmouseleave={() => (hovered = null)}
+	>
 		{#each selected as project}
-			<li><ProjectRow {project} size="lg" /></li>
+			<li onmouseenter={() => (hovered = project)}>
+				<ProjectRow {project} size="lg" />
+			</li>
 		{/each}
 	</ul>
 </section>
+
+<HoverPreview image={hovered?.heroImage} title={hovered?.title} x={mouseX} y={mouseY} />
 
 <section
 	class="px-5 sm:px-6 md:px-12 pb-20 sm:pb-28 grid grid-cols-12 gap-x-4 sm:gap-x-6 gap-y-6"
