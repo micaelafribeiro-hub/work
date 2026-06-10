@@ -5,12 +5,18 @@
 
 	const selected = projects.slice(0, 3);
 
-	/* Cursor-following hero-image preview, active only over the
-	   Selected Work list. State lives at the section level so a
-	   single preview element tracks across rows without remounting. */
-	let hovered: Project | null = $state(null);
+	/* Shared cursor position. Both the hero emoji and the Selected
+	   Work preview consume `mouseX` / `mouseY`; each is only visible
+	   while its respective section is being hovered. */
 	let mouseX = $state(0);
 	let mouseY = $state(0);
+	const trackMouse = (e: MouseEvent) => {
+		mouseX = e.clientX;
+		mouseY = e.clientY;
+	};
+
+	let hovered: Project | null = $state(null);
+	let activeEmoji: string | null = $state(null);
 </script>
 
 <svelte:head>
@@ -30,8 +36,31 @@
 			</span>
 		</p>
 
-		<h1 class="display-xl col-span-12 md:col-span-9">
-			Product Designer, <em class="italic">Research Nerd &amp; Vibe-Code Curious</em>
+		<h1 class="display-xl col-span-12 md:col-span-9" onmousemove={trackMouse}>
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<span
+				onmouseenter={() => (activeEmoji = '👩‍🎨')}
+				onmouseleave={() => (activeEmoji = null)}
+			>
+				Product Designer
+			</span>,
+			<em class="italic">
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<span
+					onmouseenter={() => (activeEmoji = '🤓')}
+					onmouseleave={() => (activeEmoji = null)}
+				>
+					Research Nerd
+				</span>
+				&amp;
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<span
+					onmouseenter={() => (activeEmoji = '🤘')}
+					onmouseleave={() => (activeEmoji = null)}
+				>
+					Vibe-Code Curious
+				</span>
+			</em>
 		</h1>
 	</div>
 
@@ -65,10 +94,7 @@
 
 	<ul
 		class="mt-8 sm:mt-12 flex flex-col"
-		onmousemove={(e) => {
-			mouseX = e.clientX;
-			mouseY = e.clientY;
-		}}
+		onmousemove={trackMouse}
 		onmouseleave={() => (hovered = null)}
 	>
 		{#each selected as project}
@@ -80,6 +106,37 @@
 </section>
 
 <HoverPreview image={hovered?.heroImage} title={hovered?.title} x={mouseX} y={mouseY} />
+
+{#if activeEmoji}
+	<div
+		class="emoji-cursor"
+		style="--x: {mouseX}px; --y: {mouseY}px"
+		aria-hidden="true"
+	>
+		{activeEmoji}
+	</div>
+{/if}
+
+<style>
+	.emoji-cursor {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 50;
+		pointer-events: none;
+		font-size: 4rem;
+		line-height: 1;
+		transform: translate3d(calc(var(--x) + 1rem), calc(var(--y) - 50%), 0);
+		transition: transform 0.08s ease-out;
+		will-change: transform;
+	}
+
+	@media (hover: none), (prefers-reduced-motion: reduce) {
+		.emoji-cursor {
+			display: none;
+		}
+	}
+</style>
 
 <section
 	class="px-5 sm:px-6 md:px-12 pb-20 sm:pb-28 grid grid-cols-12 gap-x-4 sm:gap-x-6 gap-y-6"
