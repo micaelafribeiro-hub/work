@@ -10,6 +10,7 @@ const publicDomain = {
 export const galleryArtworks = {
 	cord: {
 		...publicDomain,
+		changes: `${publicDomain.changes} An optional, reversible 2.5D depth effect responds to the pointer and scrolling; the original reproduction is unchanged.`,
 		image: '/images/exhibition/cord-school-of-athens.webp',
 		position: '50% 60%',
 		mobilePosition: '50% 50%',
