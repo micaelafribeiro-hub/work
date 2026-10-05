@@ -28,7 +28,7 @@
 		const paint = () => {
 			// A single rigid translation per plane. Never deform artwork pixels.
 			// Keep adjacent planes within 1.5px horizontally / 1px vertically.
-			// Wider separation exposes the matte/reconstruction boundary.
+			// This travel stays inside the original-pixel overlap at every join.
 			const rates = [[1, .7], [2, 1.4], [3.5, 2.4]];
 			planes.forEach((plane, i) => {
 				if (plane) plane.style.transform = `translate3d(${(x * rates[i][0]).toFixed(3)}px, ${(y * rates[i][1]).toFixed(3)}px, 0)`;
@@ -124,6 +124,12 @@
 				<filter id={`${id}-inverse`} color-interpolation-filters="sRGB">
 					<feComponentTransfer><feFuncR type="linear" slope="-1" intercept="1" /><feFuncG type="linear" slope="-1" intercept="1" /><feFuncB type="linear" slope="-1" intercept="1" /></feComponentTransfer>
 				</filter>
+				<!-- These filters affect coverage only, never the artwork pixels.
+				     Keep original pixels under each join: complementary alpha masks
+				     leave a 25% hole at a 50% edge even when perfectly aligned. -->
+				<filter id={`${id}-core`} color-interpolation-filters="sRGB"><feMorphology operator="erode" radius="12" /></filter>
+				<filter id={`${id}-coverage`} color-interpolation-filters="sRGB"><feMorphology operator="dilate" radius="12" /></filter>
+				<filter id={`${id}-edge`} color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation=".65" /></filter>
 				{#each ['foreground', 'far'] as region}
 					<g id={`${id}-${region}-shape`}>
 						{#if region === 'far' && config.farPath}
@@ -139,27 +145,30 @@
 					<mask id={`${id}-${region}`} maskUnits="userSpaceOnUse" x="0" y="0" width={config.width} height={config.height} style="mask-type:luminance"><use href={`#${id}-${region}-shape`} /></mask>
 					<mask id={`${id}-not-${region}`} maskUnits="userSpaceOnUse" x="0" y="0" width={config.width} height={config.height} style="mask-type:luminance"><use href={`#${id}-${region}-shape`} filter={`url(#${id}-inverse)`} /></mask>
 				{/each}
+				<mask id={`${id}-foreground-core`} maskUnits="userSpaceOnUse" x="0" y="0" width={config.width} height={config.height} style="mask-type:luminance"><use href={`#${id}-foreground-shape`} filter={`url(#${id}-core)`} /></mask>
+				<mask id={`${id}-far-coverage`} maskUnits="userSpaceOnUse" x="0" y="0" width={config.width} height={config.height} style="mask-type:luminance"><use href={`#${id}-far-shape`} filter={`url(#${id}-coverage)`} /></mask>
+				<mask id={`${id}-foreground-edge`} maskUnits="userSpaceOnUse" x="0" y="0" width={config.width} height={config.height} style="mask-type:luminance"><use href={`#${id}-foreground-shape`} filter={`url(#${id}-edge)`} /></mask>
+				<g id={`${id}-underpainting`}>
+					<image href={src} width={config.width} height={config.height} />
+					<!-- Reconstruct only the concealed interior. The original edge
+					     remains beneath the moving foreground as an opaque overlap. -->
+					<image href={config.cleanPlate} width={config.width} height={config.height} preserveAspectRatio="none" mask={`url(#${id}-foreground-core)`} />
+				</g>
 			</defs>
 		</svg>
 		<div bind:this={planes[0]} class="layer far" data-depth-layer={config.layers[0]}>
 			<svg class="art" viewBox={`0 0 ${config.width} ${config.height}`}>
 				<image href={config.farPlate} width={config.width} height={config.height} preserveAspectRatio="none" />
-				<g mask={`url(#${id}-far)`}>
-					<image href={config.cleanPlate} width={config.width} height={config.height} preserveAspectRatio="none" />
-					<image href={src} width={config.width} height={config.height} mask={`url(#${id}-not-foreground)`} />
-				</g>
+				<use href={`#${id}-underpainting`} mask={`url(#${id}-far-coverage)`} />
 			</svg>
 		</div>
 		<div bind:this={planes[1]} class="layer middle" data-depth-layer={config.layers[1]}>
 			<svg class="art" viewBox={`0 0 ${config.width} ${config.height}`}>
-				<g mask={`url(#${id}-not-far)`}>
-					<image href={config.cleanPlate} width={config.width} height={config.height} preserveAspectRatio="none" />
-					<image href={src} width={config.width} height={config.height} mask={`url(#${id}-not-foreground)`} />
-				</g>
+				<use href={`#${id}-underpainting`} mask={`url(#${id}-not-far)`} />
 			</svg>
 		</div>
 		<div bind:this={planes[2]} class="layer foreground" data-depth-layer={config.layers[2]}>
-			<svg class="art" viewBox={`0 0 ${config.width} ${config.height}`}><image href={src} width={config.width} height={config.height} mask={`url(#${id}-foreground)`} /></svg>
+			<svg class="art" viewBox={`0 0 ${config.width} ${config.height}`}><image href={src} width={config.width} height={config.height} mask={`url(#${id}-foreground-edge)`} /></svg>
 		</div>
 	{/if}
 </div>

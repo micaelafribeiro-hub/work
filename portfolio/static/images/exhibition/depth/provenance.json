@@ -6,7 +6,7 @@
     "gray": "middle",
     "black": "far"
   },
-  "compositing": "Original pixels are used for visible cutouts; generated plates fill only disocclusions. Foreground mattes are not dilated, avoiding a carried-over background rim. No synthetic silhouette shadows are applied. Cord and Tenzo far openings are traced in gallery-depth.ts to avoid the automatic mask classifying architectural gaps as sky. Tenzo lower floor is united with the banquet.",
+  "compositing": "Original pixels are used for visible cutouts. Reconstructed foreground interiors use a matte eroded by 12 source pixels, retaining an opaque original-pixel overlap beneath moving silhouettes. The far plane's original coverage expands by 12 source pixels beneath the middle plane. Foreground coverage alone is feathered by 0.65 source pixels; artwork pixels are never blurred. This avoids complementary-alpha gaps and exposed reconstruction seams at the joins. No synthetic silhouette shadows are applied. Cord and Tenzo far openings are traced in gallery-depth.ts to avoid the automatic mask classifying architectural gaps as sky. Tenzo lower floor is united with the banquet.",
   "assets": [
     {
       "file": "cord/far-plate.webp",
