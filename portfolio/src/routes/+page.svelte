@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TactileExhibition from '$lib/components/TactileExhibition.svelte';
+	import CinematicPortfolio from '$lib/components/CinematicPortfolio.svelte';
 </script>
 
 <svelte:head>
@@ -7,4 +7,4 @@
 	<meta name="description" content="An interactive portfolio by Micaela Ribeiro — product design as digital curation." />
 </svelte:head>
 
-<TactileExhibition />
+<CinematicPortfolio />
