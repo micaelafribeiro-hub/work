@@ -17,7 +17,7 @@ export const galleryArtworks = {
 		artist: 'Raphael',
 		year: '1509–1511',
 		collection: 'Vatican Museums, Vatican City',
-		connection: 'Great minds in conversation. A celebration of knowledge, connection, and human potential—a curatorial parallel to helping talented people find where they belong.',
+		connection: 'Raphael brings great minds together to exchange ideas. For Cord, this becomes a metaphor for connecting talent with opportunity: helping people find a place where their knowledge can flourish.',
 		source: 'https://commons.wikimedia.org/wiki/File:Raphael_School_of_Athens.jpg',
 		context: 'https://www.museivaticani.va/content/museivaticani/en/collezioni/musei/stanze-di-raffaello/stanza-della-segnatura/scuola-di-atene.html',
 		credit: 'Public-domain reproduction via Wikimedia Commons.'
@@ -31,7 +31,7 @@ export const galleryArtworks = {
 		artist: 'Sandro Botticelli',
 		year: 'c. 1485',
 		collection: 'Uffizi Galleries, Florence',
-		connection: 'Sea, wind, and arrival on a new shore. Venus’s arrival in Cyprus becomes a poetic parallel to travel, discovery, and the freedom to begin a new journey.',
+		connection: 'Wind carries Venus towards a new shore. For Indie Campers, that sense of arrival echoes the freedom of a road trip: leaving the familiar, discovering somewhere new, and travelling at your own pace.',
 		source: 'https://commons.wikimedia.org/wiki/File:Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg',
 		context: 'https://www.uffizi.it/en/artworks/birth-of-venus',
 		credit: 'Google Art Project reproduction via Wikimedia Commons; levels-adjusted source version by Dcoetzee.'
@@ -45,7 +45,7 @@ export const galleryArtworks = {
 		artist: 'Paolo Veronese',
 		year: '1562–1563',
 		collection: 'Musée du Louvre, Paris',
-		connection: 'An extraordinary feast, made possible by the people behind it. A curatorial parallel to hospitality and the coordination that makes every service feel effortless.',
+		connection: 'Behind Veronese’s magnificent feast is a world of preparation, service, and coordination. Tenzo supports that same world of hospitality, helping restaurant teams turn complex operations into a better experience for their guests.',
 		source: 'https://commons.wikimedia.org/wiki/File:Paolo_Veronese_008.jpg',
 		context: 'https://collections.louvre.fr/en/ark:/53355/cl010064382',
 		credit: 'Public-domain reproduction via Wikimedia Commons; photographer unknown. The source metadata credits Gallerix.ru.'

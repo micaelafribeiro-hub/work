@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import { galleryArtworks } from '$lib/gallery-artworks';
+	import MuseumLabel from '$lib/components/MuseumLabel.svelte';
 	const collection = [
 		{ slug: 'cord', title: 'Cord', category: 'Research & product design', caption: 'A new perspective on career decisions.', artwork: galleryArtworks.cord },
 		{ slug: 'indie-campers', title: 'Indie Campers', category: 'Product & creative direction', caption: 'Designing the freedom to explore.', artwork: galleryArtworks['indie-campers'] },
@@ -85,18 +86,7 @@
 	<div class="scroll-controls"><button disabled={active === 0} aria-label="Previous project" onclick={() => center(active - 1)}>↑</button><span>{grid ? 'Explore the collection' : 'Scroll to explore'}</span><button disabled={active === collection.length - 1} aria-label="Next project" onclick={() => center(active + 1)}>↓</button></div>
 	<div class="display-mode"><h2>Display mode</h2><div><button aria-pressed={!grid} onclick={() => display(false)}>Slider</button><span>/</span><button aria-pressed={grid} onclick={() => display(true)}>Grid</button></div></div>
 	{#key active}
-		<details class="artwork-credit">
-			<summary>About the painting <span>+</span></summary>
-			<div class="artwork-label">
-				<p class="artwork-kicker">In the background</p>
-				<h2>{collection[active].artwork.title}</h2>
-				<p>{collection[active].artwork.artist} · {collection[active].artwork.year}<br />{collection[active].artwork.collection}</p>
-				<p>{collection[active].artwork.connection}</p>
-				<p class="image-credit">{collection[active].artwork.credit} <a href={collection[active].artwork.licenseUrl} target="_blank" rel="noreferrer">{collection[active].artwork.license}</a></p>
-				<p class="image-credit">{collection[active].artwork.changes}</p>
-				<a class="source-link" href={collection[active].artwork.source} target="_blank" rel="noreferrer">View original & source ↗</a>
-			</div>
-		</details>
+		<MuseumLabel artwork={collection[active].artwork} company={collection[active].title} slug={collection[active].slug} />
 	{/key}
 </div>
 
@@ -119,7 +109,7 @@
 	@media(max-height:650px) and (max-width:760px){.gallery{--tile:180px}.project-caption{bottom:64px}.project-caption h1{font-size:28px}.description{display:none}.about{bottom:106px}.category{margin-bottom:6px}.gallery-index button{min-height:23px}.identity p{display:none}.tile-title{font-size:26px}.counter{font-size:23px}}
 	@media(max-width:760px){.gallery:not(.grid-mode) .project-tile:not(.in-focus){opacity:0;pointer-events:none}.veil{background:linear-gradient(90deg,#16171180,transparent 75%),linear-gradient(0deg,#12140fdb,transparent 48%,#17181088)}.grid-mode .gallery-index{background:#171b16dc;padding:10px;top:15px;right:calc(var(--edge) - 10px)}}
 	.backdrop{background-position:var(--art-position)}
-	.artwork-credit{position:fixed;right:var(--edge);bottom:12px;z-index:5}.artwork-credit summary{cursor:pointer;list-style:none;font-size:8px;letter-spacing:.04em;opacity:.75;padding:5px 0}.artwork-credit summary::-webkit-details-marker{display:none}.artwork-credit summary span{margin-left:12px}.artwork-credit summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}.artwork-label{position:absolute;right:0;bottom:35px;width:340px;max-width:88vw;max-height:70svh;overflow:auto;background:#f0ede5;color:#272b27;padding:24px;box-shadow:0 14px 60px #0004}.artwork-label h2{font-size:28px;line-height:1.05;text-decoration:none;margin-bottom:12px}.artwork-label p{font-size:11px;line-height:1.6;margin:0 0 12px}.artwork-label .artwork-kicker{font-size:8px;letter-spacing:.12em;text-transform:uppercase;opacity:.6}.artwork-label .image-credit{font-size:9px;opacity:.75}.artwork-label a{text-decoration:underline;text-underline-offset:3px}.artwork-label .source-link{font-size:10px}
-	@media(max-width:760px){.backdrop{background-position:var(--art-mobile-position)}.artwork-credit{bottom:62px}.artwork-label{bottom:28px;width:330px;max-height:65svh}.grid-mode .artwork-credit{bottom:21px;left:var(--edge);right:auto}.grid-mode .artwork-label{left:0;right:auto}}
+	@media(max-width:760px){.backdrop{background-position:var(--art-mobile-position)}.project-caption{bottom:155px}.about{top:145px;bottom:auto}.grid-mode .project-caption{bottom:145px}.grid-mode .about{top:145px;bottom:auto}.grid-mode .tile-track{padding-bottom:360px}}
+	@media(max-height:650px) and (max-width:760px){.gallery{--tile:150px}.project-caption{bottom:135px}.project-caption .category{display:none}.project-caption h1{font-size:26px}.about{top:125px}.grid-mode .about{top:125px}}
 	@media(prefers-reduced-motion:reduce){.backdrop,.project-tile{transition:none;transform:none}.caption-content{animation:none}}
 </style>
