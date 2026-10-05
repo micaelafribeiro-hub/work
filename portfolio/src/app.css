@@ -14,6 +14,16 @@
 /* Paintings cross-fade at their own pace while the group moves. */
 ::view-transition-old(*):only-child,
 ::view-transition-new(*):only-child { animation-duration: 700ms; }
+/* Layer order while flying: page, then paintings, then the fade into the
+   wall, then everything else (frames, titles, chrome) on top. */
+::view-transition-group(*) { z-index: 3; }
+::view-transition-group(root) { z-index: 0; }
+::view-transition-group(*.art) { z-index: 1; }
+::view-transition-group(*.wall) { z-index: 2; }
+/* Project-page chrome, the fade into the wall and the rooms get their own
+   layers, so they ease in over the painting instead of appearing at the end. */
+::view-transition-new(*.exhibit-ui):only-child { animation: vt-dissolve-in 900ms 280ms cubic-bezier(0, 0, .2, 1) both; }
+::view-transition-old(*.exhibit-ui):only-child { animation: vt-dissolve-out 480ms cubic-bezier(.4, 0, 1, 1) both; }
 @keyframes vt-dissolve-out { to { opacity: 0; filter: blur(6px); transform: scale(.985); } }
 @keyframes vt-dissolve-in { from { opacity: 0; filter: blur(6px); transform: scale(1.015); } }
 @media (prefers-reduced-motion: reduce) {

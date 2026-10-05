@@ -117,7 +117,7 @@
 <style>
 	:global(.home-route:has(.gallery)){width:100%;max-width:none}
 	.gallery{--tile:clamp(230px,25vw,360px);--edge:3vw;--ink:#f7f4ec;min-height:100svh;color:var(--ink);font-family:var(--font-sans);isolation:isolate;background:#211e17}
-	.backdrops{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#211e17;pointer-events:none}.backdrop{position:absolute;inset:-2%;background-size:cover;background-repeat:no-repeat;opacity:0;transform:scale(1.07);transition:opacity 1000ms ease,transform 1800ms cubic-bezier(.2,.65,.3,1);will-change:opacity,transform}.backdrop.visible{opacity:1;transform:scale(1)}.veil{position:absolute;inset:0;background:linear-gradient(90deg,#16171180,transparent 48%,#1617115e),linear-gradient(0deg,#12140fb8,transparent 42%,#17181038)}
+	.backdrops{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#211e17;pointer-events:none}.backdrop{view-transition-class:art;position:absolute;inset:-2%;background-size:cover;background-repeat:no-repeat;opacity:0;transform:scale(1.07);transition:opacity 1000ms ease,transform 1800ms cubic-bezier(.2,.65,.3,1);will-change:opacity,transform}.backdrop.visible{opacity:1;transform:scale(1)}.veil{position:absolute;inset:0;background:linear-gradient(90deg,#16171180,transparent 48%,#1617115e),linear-gradient(0deg,#12140fb8,transparent 42%,#17181038)}
 	.identity,.status,.gallery-controls,.counter,.rule,.about,.project-caption,.scroll-controls{position:fixed;z-index:3}
 	.gallery-controls{right:var(--edge);top:30px;display:flex;flex-direction:column;align-items:flex-end;gap:14px}
 	.identity{left:var(--edge);top:35px}.identity>a{font:600 22px/1 var(--font-sans);letter-spacing:-.02em}.identity p{font-size:9px;letter-spacing:.06em;margin:10px 0 0;opacity:.75}
