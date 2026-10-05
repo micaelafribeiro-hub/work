@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Venus — layered depth preview</title>
+  <style>
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #222; }
+    body { display: grid; place-items: center; }
+    main { position: relative; width: min(100vw, calc(100svh * 1569 / 1003)); aspect-ratio: 1569 / 1003; overflow: hidden; container-type: inline-size; isolation: isolate; }
+    img { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; user-select: none; }
+    .figure { transition: transform .6s ease; will-change: transform; }
+    /* One broad, warm shadow per real alpha layer. No hard contact outline.
+       Container units keep the softness proportional to the painting. */
+    .sides { filter: drop-shadow(.2cqw .6cqw .9cqw rgb(32 28 20 / .22)); }
+    .venus { filter: drop-shadow(.35cqw .85cqw 1.15cqw rgb(32 28 20 / .28)); }
+    @media (prefers-reduced-motion: reduce) { .figure { transition: none; transform: none !important; will-change: auto; } }
+  </style>
+</head>
+<body>
+  <main role="img" aria-label="A layered reinterpretation of The Birth of Venus, with softly shadowed figures above the landscape.">
+    <img src="/layers/background.png" alt="" draggable="false">
+    <img class="figure sides" src="/layers/side-figures.png" alt="" draggable="false">
+    <img class="figure venus" src="/layers/venus-shell.png" alt="" draggable="false">
+  </main>
+  <script>
+    const stage = document.querySelector('main');
+    const figures = [...document.querySelectorAll('.figure')];
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const fine = matchMedia('(hover: hover) and (pointer: fine)');
+    const rest = () => figures.forEach(image => image.style.transform = 'translate(0, 0)');
+    addEventListener('pointermove', event => {
+      if (reduced.matches || !fine.matches || event.pointerType !== 'mouse') return;
+      const bounds = stage.getBoundingClientRect();
+      const clamp = n => Math.max(-1, Math.min(1, n));
+      const x = clamp((event.clientX - bounds.left) / bounds.width * 2 - 1);
+      const y = clamp((event.clientY - bounds.top) / bounds.height * 2 - 1);
+      const scale = bounds.width / 1569;
+      figures.forEach((image, i) => image.style.transform = `translate(${x * (i + 1) * 3 * scale}px, ${y * (i + 1) * 2 * scale}px)`);
+    }, { passive: true });
+    addEventListener('blur', rest);
+    document.documentElement.addEventListener('pointerleave', rest);
+    reduced.addEventListener('change', rest);
+    fine.addEventListener('change', rest);
+  </script>
+</body>
+</html>
