@@ -7,10 +7,12 @@ const publicDomain = {
 	changes: 'Resized to 2560px wide and converted to WebP. Displayed with responsive cropping and a dark readability overlay; no additional colour grading.'
 };
 
+const layeredDisplay = `${publicDomain.changes} Optional parallax separates the original reproduction into three rigid planes, with soft simulated shadows behind the foreground and middle cutouts. AI-assisted segmentation and reconstructed hidden backgrounds fill the small areas revealed between planes. Original source files are unchanged; reduced-motion mode shows the original still.`;
+
 export const galleryArtworks = {
 	cord: {
 		...publicDomain,
-		changes: `${publicDomain.changes} Optional parallax separates the original reproduction into rigid foreground and architecture layers, with soft simulated shadows behind the foreground silhouette. An AI-assisted mask and reconstructed background fill only the areas revealed between layers. The original source file is unchanged; reduced-motion mode shows the original still.`,
+		changes: layeredDisplay,
 		image: '/images/exhibition/cord-school-of-athens.webp',
 		position: '50% 60%',
 		mobilePosition: '50% 50%',
@@ -25,6 +27,7 @@ export const galleryArtworks = {
 	},
 	'indie-campers': {
 		...publicDomain,
+		changes: layeredDisplay,
 		image: '/images/exhibition/indie-birth-of-venus.webp',
 		position: '50% 48%',
 		mobilePosition: '59% 50%',
@@ -39,6 +42,7 @@ export const galleryArtworks = {
 	},
 	tenzo: {
 		...publicDomain,
+		changes: layeredDisplay,
 		image: '/images/exhibition/tenzo-wedding-at-cana.webp',
 		position: '50% 57%',
 		mobilePosition: '57% 50%',

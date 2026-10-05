@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "purpose": "Three rigid parallax planes in each original painting; no per-pixel warping or page layout changes.",
+  "maskEncoding": {
+    "white": "foreground",
+    "gray": "middle",
+    "black": "far"
+  },
+  "compositing": "Original pixels are used for visible cutouts; generated plates fill only disocclusions. Foreground mattes have a 2-source-pixel safety margin. Cord and Tenzo far openings are traced in gallery-depth.ts to avoid the automatic mask classifying architectural gaps as sky. Tenzo lower floor is united with the banquet.",
+  "assets": [
+    {
+      "file": "cord/far-plate.webp",
+      "source": "cord-school-of-athens.webp",
+      "mode": "built-in image_gen edit",
+      "prompt": "Use case: precise-object-edit. Create a far-background reveal plate for the School of Athens image. Keep the distant central building visible through the rear arch, including its small facade and sky, at its EXACT original size and position in the canvas. Remove all living people, all foreground stairs, statues, and the large surrounding vaulted room/arches; inpaint these removed parts by extending the DISTANT pale stone building and blue/cloud sky outward across the canvas. Especially extend the distant facade and sky 60 pixels beyond the existing central rear arch boundary, so no dark arch edge, people or main room structure remains there. Preserve the complete canvas framing and original distant-building perspective and colors; do not zoom into the building. This is a hidden reveal plate; the original painting will cover almost all of it. No text or new figures.",
+      "generatedOriginal": "/Users/micaela.ribeiro/.codex/generated_images/01a0b9bd-4200-7840-89b9-d97fcc70e7c7/exec-e16bf401-4a49-46c9-a3d7-65870a479075.png"
+    },
+    {
+      "file": "indie-campers/clean-plate.webp",
+      "source": "indie-birth-of-venus.webp",
+      "mode": "built-in image_gen edit",
+      "prompt": "Use case: precise-object-edit. This painting is the edit target. Create an aligned clean background plate of Botticelli's Birth of Venus by removing ALL four human figures, their hair, wings and garments, and the large shell. Remove the floating flowers as well. Reconstruct the water, sky, shoreline and tree branches that were hidden behind them. Preserve all visible background architecture-free landscape, horizon, trees, original fresco/tempera texture, lighting and colors exactly. Keep full original framing, aspect ratio, scale, and coordinates, no crop or zoom. Do not add new decorative objects or figures. This image will be used only to fill tiny revealed gaps behind original cutouts.",
+      "generatedOriginal": "/Users/micaela.ribeiro/.codex/generated_images/01a0b9bd-4200-7840-89b9-d97fcc70e7c7/exec-e1db2597-52b5-43e6-9ded-8b3637454b74.png"
+    },
+    {
+      "file": "indie-campers/far-plate.webp",
+      "source": "indie-birth-of-venus.webp",
+      "mode": "built-in image_gen edit",
+      "prompt": "Use case: precise-object-edit. Create a sky-only far-background reveal plate for the supplied Birth of Venus painting. Preserve the visible muted blue-gray sky at its original coordinates and extend the same softly textured painted sky over the ENTIRE canvas, replacing every person, wing, garment, flower, shell, tree, ocean and land. No horizon line or objects remain. Match Botticelli's original atmospheric sky color and tempera texture exactly; no added dramatic clouds, no new colors, no modern photo look. Preserve original canvas aspect ratio. This will only fill narrow revealed gaps at the edges of original sky cutouts.",
+      "generatedOriginal": "/Users/micaela.ribeiro/.codex/generated_images/01a0b9bd-4200-7840-89b9-d97fcc70e7c7/exec-78253d11-63bd-4b99-8da3-826d2ad9cc55.png"
+    },
+    {
+      "file": "tenzo/clean-plate.webp",
+      "source": "tenzo-wedding-at-cana.webp",
+      "mode": "built-in image_gen edit",
+      "prompt": "Use case: precise-object-edit. Image is the exact edit target. Create an aligned clean background plate of Wedding Feast at Cana by removing ONLY the LOWER banquet: all guests and musicians below the terrace balustrade, the lower tables and tablecloths, dogs, vessels, chairs and their objects. Reconstruct the stone terrace base, lower colonnade walls, and tiled floor behind the removed lower banquet. KEEP all the UPPER terrace guests above/on the balustrade, balcony figures, all monumental architecture, columns, sculptures, open sky and distant bell tower unchanged in their exact positions. Match painterly texture, lighting and colors. Preserve complete original framing and coordinates without cropping, zooming, shifting or restyling. The clean area will only fill revealed edges behind an original-pixel foreground cutout.",
+      "generatedOriginal": "/Users/micaela.ribeiro/.codex/generated_images/01a0b9bd-4200-7840-89b9-d97fcc70e7c7/exec-4d386a5c-adf7-430b-a62e-a9d77a7071e3.png"
+    },
+    {
+      "file": "tenzo/far-plate.webp",
+      "source": "tenzo-wedding-at-cana.webp",
+      "mode": "built-in image_gen edit",
+      "prompt": "Use case: precise-object-edit. Create a far-background reveal plate of Wedding Feast at Cana. Preserve the original blue sky, pale clouds, birds, and solitary distant bell tower EXACTLY at their original size and coordinates. Remove all other architecture, all people, columns, balconies, balustrade and lower banquet; extend the original clouded blue sky seamlessly into those removed areas across the full canvas, extending the tower's base naturally downward where hidden. Do not move or enlarge the bell tower. Keep full original canvas aspect ratio and framing; match the original painted texture and colors, no dramatic new cloud formations, no text. This is an inpainting plate only for narrow disocclusion gaps behind original architecture.",
+      "generatedOriginal": "/Users/micaela.ribeiro/.codex/generated_images/01a0b9bd-4200-7840-89b9-d97fcc70e7c7/exec-6d5178e2-39fe-47c3-a614-1dec95c07054.png"
+    },
+    {
+      "file": "cord/segmentation.webp",
+      "source": "cord-school-of-athens.webp",
+      "mode": "built-in image_gen edit",
+      "prompt": "Use case: background-extraction. Create an exact aligned THREE-COLOR segmentation mask of this School of Athens image, preserving the entire original framing and coordinates. ONLY three flat colors, no shading, texture or outlines. PURE WHITE #FFFFFF: ALL living human figures, their hair, clothes, hands, books and the little desk held/used by the seated man at lower center. Do NOT include the stairs or floor in white. MEDIUM GRAY #808080: all foreground floor, stairs, major surrounding architecture, main vaulted arch, statues, side columns and ornament. PURE BLACK #000000: ONLY the distant building and open sky visible INSIDE the central rear arch opening (behind Plato and Aristotle), from the small blue-sky opening at the center down through the distant facade. The nearer main arch's curved underside stays GRAY. Accurately trace every silhouette at its original position, including gaps between people's legs. All figures are white, not the floor. Black far region, gray middle architecture and white people must tile the complete image. No artistic reinterpretation, no crop, no perspective change. It is a precise compositing matte, not a depth gradient. Output is exclusively a flat technical selection mask for an art-history website, not a rendered painting or depiction of bodies.",
+      "generatedOriginal": "/Users/micaela.ribeiro/.codex/generated_images/01a0b9bd-4200-7840-89b9-d97fcc70e7c7/exec-d5f6b45c-fdef-46be-bbc9-862e573eb360.png"
+    },
+    {
+      "file": "tenzo/segmentation.webp",
+      "source": "tenzo-wedding-at-cana.webp",
+      "mode": "built-in image_gen edit",
+      "prompt": "Use case: background-extraction. Produce an exact aligned THREE-COLOR compositing mask of this Wedding Feast at Cana painting. Keep entire framing, aspect ratio, and all positions precisely matched. WHITE #FFFFFF: the entire LOWER banquet ensemble below the terrace balustrade, including guests, musicians, tables, tablecloths, dogs, vessels, seats and the foreground floor below them; trace the uppermost heads of these LOWER guests, starting roughly 60 percent down the picture. GRAY #808080: the terrace balustrade, ALL people on the UPPER terrace and balconies, both sides of the monumental architecture, columns, walls, statues, and cornices. BLACK #000000: the open blue sky and clouds between the buildings INCLUDING the solitary distant bell tower (keep the bell tower with the far background). Three entirely flat colors only, no gradients or texture, no black outlines inside the white banquet. No recropping or perspective changes. Detailed accurate edges, not approximate horizontal strips. This is a segmentation matte for separate rigid parallax layers. Output is exclusively a flat technical selection mask for an art-history website, not a rendered painting or depiction of bodies.",
+      "generatedOriginal": "/Users/micaela.ribeiro/.codex/generated_images/01a0b9bd-4200-7840-89b9-d97fcc70e7c7/exec-de70f91f-15fe-4536-821d-4ed94538cf70.png"
+    }
+  ],
+  "manualAssets": [
+    {
+      "file": "indie-campers/segmentation.svg",
+      "mode": "Hand-traced vector compositing regions",
+      "reason": "Built-in image generation rejected the technical Venus mask. No CLI/API fallback was used."
+    }
+  ],
+  "reusedAssets": [
+    {
+      "file": "cord/clean-plate.webp",
+      "source": "../athens-layers/clean-plate.png",
+      "promptRecord": "../athens-layers/provenance.json"
+    }
+  ],
+  "encoding": "Color plates encoded as WebP quality 88; segmentation encoded losslessly. Generated originals retained at the recorded paths."
+}

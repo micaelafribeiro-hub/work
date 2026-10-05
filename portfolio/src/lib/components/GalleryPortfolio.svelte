@@ -3,6 +3,7 @@
 	import { galleryArtworks } from '$lib/gallery-artworks';
 	import MuseumLabel from '$lib/components/MuseumLabel.svelte';
 	import PaintingDepth from '$lib/components/PaintingDepth.svelte';
+	import { galleryDepth } from '$lib/gallery-depth';
 	const collection = [
 		{ slug: 'cord', title: 'Cord', category: 'Research & product design', caption: 'A new perspective on career decisions.', artwork: galleryArtworks.cord },
 		{ slug: 'indie-campers', title: 'Indie Campers', category: 'Product & creative direction', caption: 'Designing the freedom to explore.', artwork: galleryArtworks['indie-campers'] },
@@ -57,7 +58,7 @@
 	<div class="backdrops" aria-hidden="true">
 		{#each collection as project, i}
 			<div class="backdrop" class:visible={active === i} style:background-image={`url('${project.artwork.image}')`} style:--art-position={project.artwork.position} style:--art-mobile-position={project.artwork.mobilePosition}>
-				{#if project.slug === 'cord'}<PaintingDepth src={project.artwork.image} active={active === i} />{/if}
+				<PaintingDepth src={project.artwork.image} config={galleryDepth[project.slug]} index={i} active={active === i} />
 			</div>
 		{/each}
 		<div class="veil"></div>
