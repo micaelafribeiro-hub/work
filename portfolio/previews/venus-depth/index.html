@@ -10,10 +10,10 @@
     main { position: relative; width: min(100vw, calc(100svh * 1569 / 1003)); aspect-ratio: 1569 / 1003; overflow: hidden; container-type: inline-size; isolation: isolate; }
     img { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; user-select: none; }
     .figure { will-change: transform; }
-    /* One broad, warm shadow per real alpha layer. No hard contact outline.
-       Container units keep the softness proportional to the painting. */
-    .sides { filter: drop-shadow(.2cqw .6cqw .9cqw rgb(32 28 20 / .22)); }
-    .venus { filter: drop-shadow(.35cqw .85cqw 1.15cqw rgb(32 28 20 / .28)); }
+    /* Per alpha layer: a tight contact shadow defines the silhouette, a broad
+       cast shadow lifts it. Container units keep both proportional. */
+    .sides { filter: drop-shadow(0 .2cqw .3cqw rgb(24 20 14 / .3)) drop-shadow(.5cqw 1.3cqw 1.7cqw rgb(24 20 14 / .38)); }
+    .venus { filter: drop-shadow(0 .3cqw .4cqw rgb(24 20 14 / .35)) drop-shadow(.8cqw 2cqw 2.4cqw rgb(24 20 14 / .46)); }
     @media (prefers-reduced-motion: reduce) { .figure { transform: none !important; will-change: auto; } }
   </style>
 </head>
@@ -30,7 +30,7 @@
     const figures = [...document.querySelectorAll('.figure')];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const fine = matchMedia('(hover: hover) and (pointer: fine)');
-    const rates = [[3, 2], [6, 4]]; // source px at full deflection: sides, Venus
+    const rates = [[11, 8], [25, 17]]; // source px at full deflection: sides, Venus
     const clamp = n => Math.max(-1, Math.min(1, n));
     let x = 0, y = 0, targetX = 0, targetY = 0, frame = 0, previous = 0;
     const paint = () => {

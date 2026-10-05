@@ -37,114 +37,8 @@ export type Project = {
 
 export const projects: Project[] = [
 	{
-		slug: 'cord',
-		no: '01',
-		title: 'Cord',
-		subtitle: 'From research insight to revenue stream',
-		hook: 'How a question I asked unprompted became a paid subscription product, in seven months.',
-		role: 'Product Designer',
-		year: '2021–23',
-		yearRange: '2021–2023',
-		heroImage: {
-			ratio: '16:9',
-			description:
-				'Hero shot of the Salary Benchmarking Tool live at cord.co/salary-tool. Best option: a clean capture of the public salary page with the headline chart visible, or a device mockup of the logged-in dashboard. Aim for editorial calm.'
-		},
-		meta: [
-			{ label: 'Company', value: 'Cord' },
-			{ label: 'Role', value: 'Product Designer (solo)' },
-			{ label: 'Timeline', value: 'Research to launch in 3–6 months. Paid within 7.' },
-			{ label: 'Methods', value: 'Interviews · Surveys · Analytics · Competitor analysis · Heuristic evaluation' },
-			{ label: 'Live', value: 'cord.co/salary-tool', href: 'https://cord.co/salary-tool' }
-		],
-		sections: [
-			{
-				eyebrow: 'Act 1 · The problem',
-				heading: "We weren't asking why people really came to Cord",
-				body: "Cord's core product was a recruitment messaging tool, connecting software engineers directly with hiring managers at tech companies. The product worked. But organic acquisition was stagnant, reactivation rates were low, and the team was focused on retention features for already-active users. I started asking a different question: what do engineers actually want when they're thinking about their career, not just when they're actively applying?",
-				callout: {
-					label: 'My initiative',
-					body: "This project wasn't assigned to me. I identified the opportunity, defined the research scope, wrote the script, ran the calls, and synthesised the findings into a full product proposal. Then I presented it at a company all-hands and got the green light."
-				}
-			},
-			{
-				eyebrow: 'Act 2 · The research',
-				heading: 'A research programme at scale, then the insight hiding in plain sight',
-				body: "I ran a comprehensive research programme across the UK and EU: 91 participants, mixed across active, passive, and not-looking users, and across cord and non-cord users. Video interviews for depth, surveys for scale. I designed the script, ran the calls, and analysed the data.",
-				images: [
-					{
-						ratio: '4:3',
-						description:
-							'Research artefact: a redacted slide from the research presentation, an affinity map of interview themes, or a "research wall" photo. The point is to show the rigour behind the insight, not pretty UI. Black-and-white reads well at this scale.',
-						caption: 'Example: a slide from the research deck, or themed quotes from interviews.'
-					}
-				],
-				stats: [
-					{ value: '91', label: 'Total participants' },
-					{ value: '58', label: 'Cord users interviewed' },
-					{ value: '32', label: 'Non-cord users interviewed' },
-					{ value: '86%', label: 'Rated salary insights "very useful"' }
-				],
-				items: [
-					{ title: 'Video interviews', body: 'Active, passive, and not-looking users. Cord users and non-cord users.' },
-					{ title: 'Survey', body: '91 respondents in total. Quantitative validation at scale.' },
-					{ title: 'Analytics', body: 'Mapping where users disengaged and what they returned for.' },
-					{ title: 'Competitor analysis', body: 'Career intelligence market scan, run by a parallel team.' }
-				],
-				callout: {
-					label: 'The key insight',
-					body: "Across every cut of the data, one topic dominated: salary intelligence. 50% of respondents named understanding fair pay as the single biggest challenge in deciding where to work. Cord already had thousands of job listings with salary ranges, and thousands of CVs with salary expectations attached. Nobody had connected the dots."
-				}
-			},
-			{
-				eyebrow: 'Act 3 · The product',
-				heading: 'Two experiences, one insight',
-				body: "I proposed a two-phase rollout. First, a logged-in experience: a personalised salary dashboard that drew from each Cord user's existing profile, so they got highly relevant information with no extra effort. We ran this for a couple of months. Then phase two: a public Salary Page on Cord's landing page, with deliberate restrictions and sign-up gating, so the same data could pull non-users into the funnel through SEO.",
-				images: [
-					{
-						ratio: '16:9',
-						description:
-							'Product screens of the SBT. Best option: a side-by-side of the logged-in personalised dashboard and the public salary page, showing the two-experience strategy. Marketing-screenshot quality.',
-						caption: 'Example: logged-in personalised view (left) and public salary page (right).'
-					}
-				],
-				items: [
-					{
-						title: 'Logged-in experience',
-						body: "Personalised salary data drawn from the user's existing Cord profile. Minimum effort for maximum signal."
-					},
-					{
-						title: 'Public salary page',
-						body: 'SEO-driven acquisition surface with sign-up gating. Enough value to want it, enough friction to register.'
-					},
-					{
-						title: 'Double-diamond process',
-						body: 'Discover, Define, Design, Test, Deliver. Low-fi prototypes, stakeholder reviews, high-fi, copy passes, heuristic evaluation, ship.'
-					},
-					{
-						title: 'Live in production',
-						body: 'cord.co/salary-tool. Still running today.'
-					}
-				]
-			},
-			{
-				eyebrow: 'Outcomes',
-				heading: 'A research question became a business decision',
-				body: 'The feature shipped in three to six months from research to launch. Active users went up in the first week and reactivation lifted significantly. Within seven months of launch the salary tool was placed behind a paywall, creating a new paid subscription tier for Cord and turning a research-driven product into a revenue stream.',
-				stats: [
-					{ value: '↑ W1', label: 'Active users up in launch week' },
-					{ value: '↑', label: 'Significant reactivation lift' },
-					{ value: '7mo', label: 'Launch to monetisation' },
-					{ value: 'Paid', label: 'Subscription tier' }
-				]
-			}
-		],
-		quote:
-			'Not executing briefs. Identifying where the product could go, and building the case to take it there.'
-	},
-	{
 		slug: 'indie-campers',
-		no: '02',
+		no: '01',
 		title: 'Indie Campers',
 		subtitle: 'Owning design end to end',
 		hook: 'Rebuilding design at a global marketplace: 850,000 customers, 20+ countries, zero design culture when I arrived.',
@@ -295,6 +189,112 @@ export const projects: Project[] = [
 				]
 			}
 		]
+	},
+	{
+		slug: 'cord',
+		no: '02',
+		title: 'Cord',
+		subtitle: 'From research insight to revenue stream',
+		hook: 'How a question I asked unprompted became a paid subscription product, in seven months.',
+		role: 'Product Designer',
+		year: '2021–23',
+		yearRange: '2021–2023',
+		heroImage: {
+			ratio: '16:9',
+			description:
+				'Hero shot of the Salary Benchmarking Tool live at cord.co/salary-tool. Best option: a clean capture of the public salary page with the headline chart visible, or a device mockup of the logged-in dashboard. Aim for editorial calm.'
+		},
+		meta: [
+			{ label: 'Company', value: 'Cord' },
+			{ label: 'Role', value: 'Product Designer (solo)' },
+			{ label: 'Timeline', value: 'Research to launch in 3–6 months. Paid within 7.' },
+			{ label: 'Methods', value: 'Interviews · Surveys · Analytics · Competitor analysis · Heuristic evaluation' },
+			{ label: 'Live', value: 'cord.co/salary-tool', href: 'https://cord.co/salary-tool' }
+		],
+		sections: [
+			{
+				eyebrow: 'Act 1 · The problem',
+				heading: "We weren't asking why people really came to Cord",
+				body: "Cord's core product was a recruitment messaging tool, connecting software engineers directly with hiring managers at tech companies. The product worked. But organic acquisition was stagnant, reactivation rates were low, and the team was focused on retention features for already-active users. I started asking a different question: what do engineers actually want when they're thinking about their career, not just when they're actively applying?",
+				callout: {
+					label: 'My initiative',
+					body: "This project wasn't assigned to me. I identified the opportunity, defined the research scope, wrote the script, ran the calls, and synthesised the findings into a full product proposal. Then I presented it at a company all-hands and got the green light."
+				}
+			},
+			{
+				eyebrow: 'Act 2 · The research',
+				heading: 'A research programme at scale, then the insight hiding in plain sight',
+				body: "I ran a comprehensive research programme across the UK and EU: 91 participants, mixed across active, passive, and not-looking users, and across cord and non-cord users. Video interviews for depth, surveys for scale. I designed the script, ran the calls, and analysed the data.",
+				images: [
+					{
+						ratio: '4:3',
+						description:
+							'Research artefact: a redacted slide from the research presentation, an affinity map of interview themes, or a "research wall" photo. The point is to show the rigour behind the insight, not pretty UI. Black-and-white reads well at this scale.',
+						caption: 'Example: a slide from the research deck, or themed quotes from interviews.'
+					}
+				],
+				stats: [
+					{ value: '91', label: 'Total participants' },
+					{ value: '58', label: 'Cord users interviewed' },
+					{ value: '32', label: 'Non-cord users interviewed' },
+					{ value: '86%', label: 'Rated salary insights "very useful"' }
+				],
+				items: [
+					{ title: 'Video interviews', body: 'Active, passive, and not-looking users. Cord users and non-cord users.' },
+					{ title: 'Survey', body: '91 respondents in total. Quantitative validation at scale.' },
+					{ title: 'Analytics', body: 'Mapping where users disengaged and what they returned for.' },
+					{ title: 'Competitor analysis', body: 'Career intelligence market scan, run by a parallel team.' }
+				],
+				callout: {
+					label: 'The key insight',
+					body: "Across every cut of the data, one topic dominated: salary intelligence. 50% of respondents named understanding fair pay as the single biggest challenge in deciding where to work. Cord already had thousands of job listings with salary ranges, and thousands of CVs with salary expectations attached. Nobody had connected the dots."
+				}
+			},
+			{
+				eyebrow: 'Act 3 · The product',
+				heading: 'Two experiences, one insight',
+				body: "I proposed a two-phase rollout. First, a logged-in experience: a personalised salary dashboard that drew from each Cord user's existing profile, so they got highly relevant information with no extra effort. We ran this for a couple of months. Then phase two: a public Salary Page on Cord's landing page, with deliberate restrictions and sign-up gating, so the same data could pull non-users into the funnel through SEO.",
+				images: [
+					{
+						ratio: '16:9',
+						description:
+							'Product screens of the SBT. Best option: a side-by-side of the logged-in personalised dashboard and the public salary page, showing the two-experience strategy. Marketing-screenshot quality.',
+						caption: 'Example: logged-in personalised view (left) and public salary page (right).'
+					}
+				],
+				items: [
+					{
+						title: 'Logged-in experience',
+						body: "Personalised salary data drawn from the user's existing Cord profile. Minimum effort for maximum signal."
+					},
+					{
+						title: 'Public salary page',
+						body: 'SEO-driven acquisition surface with sign-up gating. Enough value to want it, enough friction to register.'
+					},
+					{
+						title: 'Double-diamond process',
+						body: 'Discover, Define, Design, Test, Deliver. Low-fi prototypes, stakeholder reviews, high-fi, copy passes, heuristic evaluation, ship.'
+					},
+					{
+						title: 'Live in production',
+						body: 'cord.co/salary-tool. Still running today.'
+					}
+				]
+			},
+			{
+				eyebrow: 'Outcomes',
+				heading: 'A research question became a business decision',
+				body: 'The feature shipped in three to six months from research to launch. Active users went up in the first week and reactivation lifted significantly. Within seven months of launch the salary tool was placed behind a paywall, creating a new paid subscription tier for Cord and turning a research-driven product into a revenue stream.',
+				stats: [
+					{ value: '↑ W1', label: 'Active users up in launch week' },
+					{ value: '↑', label: 'Significant reactivation lift' },
+					{ value: '7mo', label: 'Launch to monetisation' },
+					{ value: 'Paid', label: 'Subscription tier' }
+				]
+			}
+		],
+		quote:
+			'Not executing briefs. Identifying where the product could go, and building the case to take it there.'
 	},
 	{
 		slug: 'tenzo',

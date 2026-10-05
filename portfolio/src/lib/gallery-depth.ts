@@ -1,44 +1,62 @@
-export type PaintingDepthConfig = {
+type DepthBase = {
 	width: number;
 	height: number;
 	position: [number, number];
 	mobilePosition: [number, number];
+};
+
+/** Three planes cut from one original painting with a segmentation matte. */
+export type MaskedDepth = DepthBase & {
 	segmentation: string;
 	cleanPlate: string;
 	farPlate: string;
-	layers: [string, string, string];
 	/** Far opening traced in normalized 1000 × 1000 artwork coordinates. */
 	farPath?: string;
 	/** A continuous foreground base (e.g. the banquet floor and its dogs). */
 	foregroundFillFrom?: number;
+	layers: [string, string, string];
 };
+
+/** Ready-made, aligned images, back to front: an opaque plate, then alpha cutouts. */
+export type CutoutDepth = DepthBase & {
+	cutouts: [string, string] | [string, string, string];
+	/** One name per cutout. */
+	layers: string[];
+};
+
+export type PaintingDepthConfig = MaskedDepth | CutoutDepth;
 
 // Matte colors: white = foreground, gray = middle, black = far background.
 // All cutouts retain the original artwork's pixels. Generated plates are
 // underneath them and become visible only in the small disocclusion gaps.
 export const galleryDepth: Record<string, PaintingDepthConfig> = {
+	// AI-generated reinterpretations supplied as separate layers, so every plane
+	// is complete and nothing needs reconstructing behind the figures.
 	cord: {
-		width: 2560, height: 1672, position: [.5, .6], mobilePosition: [.5, .5],
-		segmentation: '/images/exhibition/depth/cord/segmentation.webp',
-		cleanPlate: '/images/exhibition/depth/cord/clean-plate.webp',
-		farPlate: '/images/exhibition/depth/cord/far-plate.webp',
-		farPath: 'M430 745 L430 419 C438 367 474 350 514 350 C553 350 588 369 600 421 L600 745 Z',
-		layers: ['Distant building and sky', 'Stairs and main arch', 'People and their objects']
+		width: 1561, height: 1008, position: [.5, .8], mobilePosition: [.5, .5],
+		cutouts: [
+			'/images/exhibition/depth/cord/cutouts/background.webp',
+			'/images/exhibition/depth/cord/cutouts/philosophers.webp',
+			'/images/exhibition/depth/cord/cutouts/foreground.webp'
+		],
+		layers: ['Vaulted hall, arch and sky', 'Plato, Aristotle and the upper group', 'Foreground groups']
 	},
 	'indie-campers': {
-		width: 2560, height: 1608, position: [.5, .48], mobilePosition: [.59, .5],
-		segmentation: '/images/exhibition/depth/indie-campers/segmentation.svg',
-		cleanPlate: '/images/exhibition/depth/indie-campers/clean-plate.webp',
-		farPlate: '/images/exhibition/depth/indie-campers/far-plate.webp',
-		layers: ['Sky', 'Sea, shoreline and trees', 'Figures, drapery and shell']
+		width: 1569, height: 1003, position: [.5, .15], mobilePosition: [.59, .5],
+		cutouts: [
+			'/images/exhibition/depth/indie-campers/cutouts/background.webp',
+			'/images/exhibition/depth/indie-campers/cutouts/side-figures.webp',
+			'/images/exhibition/depth/indie-campers/cutouts/venus-shell.webp'
+		],
+		layers: ['Sky, sea, shoreline and trees', 'Zephyr, Chloris and the Hora', 'Venus and her shell']
 	},
 	tenzo: {
-		width: 2560, height: 1740, position: [.5, .57], mobilePosition: [.57, .5],
-		segmentation: '/images/exhibition/depth/tenzo/segmentation.webp',
-		cleanPlate: '/images/exhibition/depth/tenzo/clean-plate.webp',
-		farPlate: '/images/exhibition/depth/tenzo/far-plate.webp',
-		farPath: 'M348 0 H682 L684 40 L687 80 L682 122 L663 162 L655 215 L677 280 L681 402 V505 H329 V340 L339 311 L344 227 L348 196 L350 140 L342 105 L342 70 L350 52 Z',
-		foregroundFillFrom: .75,
-		layers: ['Sky and distant bell tower', 'Architecture and upper terrace', 'Banquet, guests and musicians']
+		width: 1448, height: 1086, position: [.5, .68], mobilePosition: [.57, .5],
+		cutouts: [
+			'/images/exhibition/depth/tenzo/cutouts/background.webp',
+			'/images/exhibition/depth/tenzo/cutouts/terrace.webp',
+			'/images/exhibition/depth/tenzo/cutouts/banquet.webp'
+		],
+		layers: ['Architecture and sky', 'Upper terrace, servants and onlookers', 'Banquet, guests and musicians']
 	}
 };

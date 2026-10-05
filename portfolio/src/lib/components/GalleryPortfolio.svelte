@@ -5,8 +5,8 @@
 	import PaintingDepth from '$lib/components/PaintingDepth.svelte';
 	import { galleryDepth } from '$lib/gallery-depth';
 	const collection = [
-		{ slug: 'cord', title: 'Cord', category: 'Research & product design', caption: 'A new perspective on career decisions.', artwork: galleryArtworks.cord },
 		{ slug: 'indie-campers', title: 'Indie Campers', category: 'Product & creative direction', caption: 'Designing the freedom to explore.', artwork: galleryArtworks['indie-campers'] },
+		{ slug: 'cord', title: 'Cord', category: 'Research & product design', caption: 'A new perspective on career decisions.', artwork: galleryArtworks.cord },
 		{ slug: 'tenzo', title: 'Tenzo', category: 'Product & systems design', caption: 'Clarity behind every service.', artwork: galleryArtworks.tenzo }
 	];
 	let active = $state(0);

@@ -22,16 +22,23 @@
 		const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 		let disposed = false, loading = false;
 		let frame = 0, previousTime = 0;
-		let x = 0, y = 0, targetX = 0, targetY = 0, drift = 0;
+		let x = 0, y = 0, targetX = 0, targetY = 0, drift = 0, artWidth = 1000;
 		const clamp = (value: number) => Math.max(-1, Math.min(1, value));
 		const stop = () => { cancelAnimationFrame(frame); frame = 0; previousTime = 0; };
 		const paint = () => {
 			// A single rigid translation per plane. Never deform artwork pixels.
-			// Keep adjacent planes within 1.5px horizontally / 1px vertically.
-			// This travel stays inside the original-pixel overlap at every join.
-			const rates = [[1, .7], [2, 1.4], [3.5, 2.4]];
+			// Travel is per 1000px of painting width. The back plane stays put so
+			// its frame edge is never revealed; the frontmost travels furthest.
+			// Masked planes must stay within the 12 source-pixel original overlap
+			// at each join (about 4.7 per 1000 of a 2560px painting), or the
+			// reconstructed plates show as pale outlines around the figures.
+			const cutouts = 'cutouts' in config;
+			const count = cutouts ? config.cutouts.length : 3;
+			const rates = (cutouts ? [[0, 0], [7, 5], [16, 11]] : [[0, 0], [4, 3], [8.5, 6]]).slice(-count);
+			rates[0] = [0, 0];
+			const unit = artWidth / 1000;
 			planes.forEach((plane, i) => {
-				if (plane) plane.style.transform = `translate3d(${(x * rates[i][0]).toFixed(3)}px, ${(y * rates[i][1]).toFixed(3)}px, 0)`;
+				if (plane) plane.style.transform = `translate3d(${(x * rates[i][0] * unit).toFixed(3)}px, ${(y * rates[i][1] * unit).toFixed(3)}px, 0)`;
 			});
 		};
 		const draw = (time: number) => {
@@ -62,7 +69,8 @@
 			const width = scene.clientWidth, height = scene.clientHeight;
 			const scale = Math.max(width / config.width, height / config.height);
 			const position = innerWidth <= 760 ? config.mobilePosition : config.position;
-			scene.style.setProperty('--art-width', `${config.width * scale}px`);
+			artWidth = config.width * scale;
+			scene.style.setProperty('--art-width', `${artWidth}px`);
 			scene.style.setProperty('--art-height', `${config.height * scale}px`);
 			scene.style.setProperty('--art-left', `${(width - config.width * scale) * position[0]}px`);
 			scene.style.setProperty('--art-top', `${(height - config.height * scale) * position[1]}px`);
@@ -72,7 +80,8 @@
 			if (loading || loaded || motion.matches || !active) return;
 			loading = true;
 			try {
-				await Promise.all([src, config.segmentation, config.cleanPlate, config.farPlate].map((url) => {
+				const urls = 'cutouts' in config ? config.cutouts : [src, config.segmentation, config.cleanPlate, config.farPlate];
+				await Promise.all(urls.map((url) => {
 					const image = new Image(); image.src = url; return image.decode();
 				}));
 				if (!disposed) { loaded = true; resize(); requestDraw(); }
@@ -112,7 +121,15 @@
 </script>
 
 <div bind:this={scene} class="depth-scene" class:ready aria-hidden="true" data-painting-depth="three-rigid-planes" data-painting-index={index}>
-	{#if loaded}
+	{#if loaded && 'cutouts' in config}
+		<!-- Complete layers need no masks or reconstruction. Their alpha edges
+		     are the artwork's own, so a soft shadow can separate the planes. -->
+		{#each config.cutouts as cutout, i}
+			<div bind:this={planes[i]} class="layer cutout" class:middle={i > 0 && i < config.cutouts.length - 1} class:front={i > 0 && i === config.cutouts.length - 1} data-depth-layer={config.layers[i]}>
+				<img class="art" src={cutout} alt="" draggable="false" />
+			</div>
+		{/each}
+	{:else if loaded && !('cutouts' in config)}
 		<svg class="mask-definitions" aria-hidden="true">
 			<defs>
 				<filter id={`${id}-foreground-select`} color-interpolation-filters="sRGB">
@@ -179,7 +196,11 @@
 	.layer { position: absolute; inset: 0; will-change: transform; }
 	.mask-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
 	.art { position: absolute; left: var(--art-left); top: var(--art-top); width: var(--art-width); height: var(--art-height); max-width: none; }
-	/* Preserve the painting's own lighting. Added silhouette shadows make
-	   the depth masks read as paper cutouts, even when the scene is still. */
+	/* Cutout figures get a tight contact shadow that defines the silhouette and
+	   a broad cast shadow that lifts it, sized to the painting. Masked planes
+	   stay unshadowed: their mattes carry a thin ring of the surrounding wall,
+	   which a shadow turns into a pale sticker outline. */
+	.cutout.middle .art { filter: drop-shadow(0 calc(var(--art-width) * .002) calc(var(--art-width) * .003) rgb(24 20 14 / .3)) drop-shadow(calc(var(--art-width) * .005) calc(var(--art-width) * .013) calc(var(--art-width) * .017) rgb(24 20 14 / .38)); }
+	.cutout.front .art { filter: drop-shadow(0 calc(var(--art-width) * .003) calc(var(--art-width) * .004) rgb(24 20 14 / .35)) drop-shadow(calc(var(--art-width) * .008) calc(var(--art-width) * .02) calc(var(--art-width) * .024) rgb(24 20 14 / .46)); }
 	@media (prefers-reduced-motion: reduce) { .depth-scene { display: none; transition: none; } }
 </style>
