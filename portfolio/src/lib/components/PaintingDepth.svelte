@@ -25,8 +25,9 @@
 		// Each layer receives one rigid translation: no displacement map,
 		// per-pixel deformation, tilt, or animated scaling.
 		const paint = () => {
-			rear.style.transform = `translate3d(${(x * 2).toFixed(3)}px, ${(y * 1.2).toFixed(3)}px, 0)`;
-			front.style.transform = `translate3d(${(x * 10).toFixed(3)}px, ${(y * 6).toFixed(3)}px, 0)`;
+			const strength = innerWidth <= 760 ? .6 : 1;
+			rear.style.transform = `translate3d(${(x * strength).toFixed(3)}px, ${(y * 1.8 * strength).toFixed(3)}px, 0)`;
+			front.style.transform = `translate3d(${(x * 4 * strength).toFixed(3)}px, ${(y * 12 * strength).toFixed(3)}px, 0)`;
 		};
 		const draw = (time: number) => {
 			frame = 0;
@@ -46,7 +47,7 @@
 			if (!frame && ready && active && !motion.matches && !document.hidden) frame = requestAnimationFrame(draw);
 		};
 		const readScroll = () => {
-			drift = clamp(scrollY / Math.max(innerHeight * .55, 1)) * .6;
+			drift = clamp(scrollY / Math.max(innerHeight * .55, 1)) * .9;
 			requestDraw();
 		};
 		const resize = () => {
@@ -67,7 +68,7 @@
 		const pointer = (event: PointerEvent) => {
 			if (!active || !ready || !pointerMedia.matches || event.pointerType !== 'mouse') return;
 			targetX = clamp(event.clientX / innerWidth * 2 - 1);
-			targetY = clamp(event.clientY / innerHeight * 2 - 1) * .65;
+			targetY = clamp(event.clientY / innerHeight * 2 - 1) * .85;
 			requestDraw();
 		};
 		const rest = () => { targetX = targetY = 0; requestDraw(); };
@@ -148,5 +149,9 @@
 	.layer { position: absolute; inset: 0; will-change: transform; }
 	.mask-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
 	.art { position: absolute; left: var(--art-left); top: var(--art-top); width: var(--art-width); height: var(--art-height); max-width: none; }
+	/* A fixed upper-left light: shadows fall behind the masked silhouette,
+	   not around the rectangular image. Soft penumbra, no glowing outline. */
+	.front .art { filter: drop-shadow(2px 5px 5px rgb(24 19 11 / .24)) drop-shadow(0 1px 1px rgb(18 14 8 / .14)); }
+	@media (max-width: 760px) { .front .art { filter: drop-shadow(1px 3px 3px rgb(24 19 11 / .2)); } }
 	@media (prefers-reduced-motion: reduce) { .depth-scene { display: none; transition: none; } }
 </style>

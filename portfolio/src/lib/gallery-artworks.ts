@@ -10,7 +10,7 @@ const publicDomain = {
 export const galleryArtworks = {
 	cord: {
 		...publicDomain,
-		changes: `${publicDomain.changes} Optional parallax separates the original reproduction into rigid foreground and architecture layers. An AI-assisted mask and reconstructed background fill only the areas revealed between layers. The original source file is unchanged; reduced-motion mode shows the original still.`,
+		changes: `${publicDomain.changes} The portrait presentation uses simulated frame and contact shadows. Optional vertical parallax separates the original reproduction into rigid foreground and architecture layers. An AI-assisted mask and reconstructed background fill only the areas revealed between layers. The original source file is unchanged; reduced-motion mode shows the original still.`,
 		image: '/images/exhibition/cord-school-of-athens.webp',
 		position: '50% 60%',
 		mobilePosition: '50% 50%',
