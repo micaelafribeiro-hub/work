@@ -2,6 +2,19 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import '../app.css';
 	import { page } from '$app/state';
+	import { onNavigate } from '$app/navigation';
+
+	// Cinematic page changes: shared elements (painting, framed tile, title)
+	// morph between pages; app.css choreographs the rest.
+	onNavigate((navigation) => {
+		if (!document.startViewTransition || navigation.from?.url.pathname === navigation.to?.url.pathname) return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 
 	let { children } = $props();
 

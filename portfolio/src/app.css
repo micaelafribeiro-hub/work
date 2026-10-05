@@ -2,10 +2,22 @@
 
 @view-transition { navigation: auto; }
 
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 420ms;
-  animation-timing-function: cubic-bezier(.2, .8, .2, 1);
+/* Cinematic page transitions. The painting, framed tile and title are
+   shared elements that glide between pages; everything else dissolves
+   through a short blur, like a camera refocusing. */
+::view-transition-group(*) {
+  animation-duration: 1000ms;
+  animation-timing-function: cubic-bezier(.7, 0, .2, 1);
+}
+::view-transition-old(root) { animation: vt-dissolve-out 520ms cubic-bezier(.4, 0, 1, 1) both; }
+::view-transition-new(root) { animation: vt-dissolve-in 760ms 260ms cubic-bezier(0, 0, .2, 1) both; }
+/* Paintings cross-fade at their own pace while the group moves. */
+::view-transition-old(*):only-child,
+::view-transition-new(*):only-child { animation-duration: 700ms; }
+@keyframes vt-dissolve-out { to { opacity: 0; filter: blur(6px); transform: scale(.985); } }
+@keyframes vt-dissolve-in { from { opacity: 0; filter: blur(6px); transform: scale(1.015); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 
 @theme {

@@ -1,15 +1,17 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
-	import { galleryArtworks } from '$lib/gallery-artworks';
+	import { afterNavigate } from '$app/navigation';
 	import MuseumLabel from '$lib/components/MuseumLabel.svelte';
 	import PaintingDepth from '$lib/components/PaintingDepth.svelte';
 	import { galleryDepth } from '$lib/gallery-depth';
-	const collection = [
-		{ slug: 'indie-campers', title: 'Indie Campers', category: 'Product & creative direction', caption: 'Designing the freedom to explore.', frame: 'black', artwork: galleryArtworks['indie-campers'] },
-		{ slug: 'cord', title: 'Cord', category: 'Research & product design', caption: 'A new perspective on career decisions.', frame: 'black', artwork: galleryArtworks.cord },
-		{ slug: 'tenzo', title: 'Tenzo', category: 'Product & systems design', caption: 'Clarity behind every service.', frame: 'black', artwork: galleryArtworks.tenzo }
-	];
-	let active = $state(0);
+	import { collection, pieceNumber as number, transitionNames } from '$lib/gallery-collection';
+	import { galleryState } from '$lib/gallery-state.svelte';
+	// Arriving from a project page: open on that painting, and settle on it
+	// once SvelteKit has handled scrolling so the view transition lands there.
+	const start = galleryState.active;
+	let active = $state(start);
+	$effect(() => { galleryState.active = active; });
+	afterNavigate(({ from }) => { if (from?.route.id?.startsWith('/work/')) center(start, false); });
 	let grid = $state(false);
 	let reduced = false;
 	let track: HTMLDivElement;
@@ -28,7 +30,6 @@
 		counter.style.top = `${(innerHeight - tile) / 2 - gap - counter.offsetHeight / 2}px`;
 	}
 	$effect(() => { void active; void grid; void balance(); });
-	const number = (i: number) => String(i + 1).padStart(2, '0');
 	function center(index: number, smooth = true) {
 		active = index;
 		const tile = track?.querySelectorAll<HTMLElement>('.project-tile')[index];
@@ -63,7 +64,7 @@
 		window.addEventListener('scroll', scroll, { passive: true });
 		window.addEventListener('resize', resize);
 		media.addEventListener('change', preference);
-		read();
+		if (start > 0) center(start, false); else read();
 		return () => { mounted = false; cancelAnimationFrame(frame); window.removeEventListener('scroll', scroll); window.removeEventListener('resize', resize); media.removeEventListener('change', preference); };
 	});
 </script>
@@ -71,7 +72,7 @@
 <div class="gallery" class:grid-mode={grid} data-project={collection[active].slug}>
 	<div class="backdrops" aria-hidden="true">
 		{#each collection as project, i}
-			<div class="backdrop" class:visible={active === i} style:background-image={`url('${project.artwork.image}')`} style:--art-position={project.artwork.position} style:--art-mobile-position={project.artwork.mobilePosition}>
+			<div class="backdrop" class:visible={active === i} style:view-transition-name={active === i ? transitionNames(project.slug).art : undefined} style:background-image={`url('${project.artwork.image}')`} style:--art-position={project.artwork.position} style:--art-mobile-position={project.artwork.mobilePosition}>
 				<PaintingDepth src={project.artwork.image} config={galleryDepth[project.slug]} index={i} active={active === i} />
 			</div>
 		{/each}
@@ -96,7 +97,7 @@
 
 	<div bind:this={track} class="tile-track" aria-label="Project collection">
 		{#each collection as project, i}
-			<a class="project-tile" data-frame={project.frame} class:in-focus={active === i} href={`/work/${project.slug}`} aria-label={`Explore ${project.title} — ${project.category}`} onmouseenter={() => { if (grid) active = i; }} onfocus={() => { if (grid) active = i; else if (mounted) center(i, false); }}>
+			<a class="project-tile" data-frame={project.frame} class:in-focus={active === i} style:view-transition-name={active === i ? transitionNames(project.slug).frame : undefined} href={`/work/${project.slug}`} onclick={() => { active = i; }} aria-label={`Explore ${project.title} — ${project.category}`} onmouseenter={() => { if (grid) active = i; }} onfocus={() => { if (grid) active = i; else if (mounted) center(i, false); }}>
 				<span class="placeholder-top"><span>{number(i)} — Selected work</span><span>↗</span></span>
 				<span class="placeholder-center"><span class="cross" aria-hidden="true">+</span><span class="tile-title">{project.title}</span><span class="image-label">Project image to come</span></span>
 				<span class="placeholder-bottom"><span>Image placeholder</span><span>1 : 1</span></span>
@@ -105,7 +106,7 @@
 	</div>
 
 	<div bind:this={caption} class="project-caption" aria-live="polite" aria-atomic="true">
-		{#key active}<div class="caption-content"><p class="category">{collection[active].category}</p><h1>{collection[active].title}</h1><p class="description">{collection[active].caption}</p><a href={`/work/${collection[active].slug}`}>View project <span>↗</span></a></div>{/key}
+		{#key active}<div class="caption-content"><p class="category">{collection[active].category}</p><h1 style:view-transition-name={transitionNames(collection[active].slug).title}>{collection[active].title}</h1><p class="description">{collection[active].caption}</p><a href={`/work/${collection[active].slug}`}>View project <span>↗</span></a></div>{/key}
 	</div>
 	<div class="scroll-controls"><button disabled={active === 0} aria-label="Previous project" onclick={() => center(active - 1)}>↑</button><span>{grid ? 'Explore the collection' : 'Scroll to explore'}</span><button disabled={active === collection.length - 1} aria-label="Next project" onclick={() => center(active + 1)}>↓</button></div>
 	{#key active}
