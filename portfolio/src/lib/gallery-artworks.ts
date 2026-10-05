@@ -1,54 +1,53 @@
-// Curated historical artworks, not generated project imagery.
-// Source and reuse statements checked on Wikimedia Commons, 2026-10-05.
-// Local WebP derivatives retain the original colours. The interface crops to
-// cover and adds a reversible dark overlay for legibility.
+// Approved Renaissance selection. Source/reuse statements checked 2026-10-05.
+// Original reproductions are resized and encoded as WebP, not AI-generated.
+// The UI applies reversible cover crops and a dark overlay for legibility.
+const publicDomain = {
+	license: 'Public domain (PD-Art)',
+	licenseUrl: 'https://creativecommons.org/publicdomain/mark/1.0/',
+	changes: 'Resized to 2560px wide and converted to WebP. Displayed with responsive cropping and a dark readability overlay; no additional colour grading.'
+};
+
 export const galleryArtworks = {
 	cord: {
-		image: '/images/exhibition/cord-haymaking.webp',
-		position: '50% 62%',
-		mobilePosition: '63% 50%',
-		title: 'Haymaking',
-		artist: 'Pieter Bruegel the Elder',
-		year: '1565',
-		collection: 'The Lobkowicz Collections, Prague',
-		connection: 'Shared work, human purpose, and a blue horizon of possibility. A curatorial parallel to Cord’s work connecting people with jobs—not a depiction of recruitment.',
-		source: 'https://commons.wikimedia.org/wiki/File:The_haymaking,_by_Pieter_Bruegel_(I).jpg',
-		context: 'https://www.getty.edu/cona/CONAFullSubject.aspx?subid=700009383',
-		credit: 'Reproduction via Wikimedia Commons; photograph credited to Petr Weigl in the source metadata.',
-		license: 'Public domain (PD-Art)',
-		licenseUrl: 'https://creativecommons.org/publicdomain/mark/1.0/',
-		changes: 'Converted to WebP; displayed with responsive cropping and a dark readability overlay.'
+		...publicDomain,
+		image: '/images/exhibition/cord-school-of-athens.webp',
+		position: '50% 60%',
+		mobilePosition: '50% 50%',
+		title: 'The School of Athens',
+		artist: 'Raphael',
+		year: '1509–1511',
+		collection: 'Vatican Museums, Vatican City',
+		connection: 'Great minds in conversation. A celebration of knowledge, connection, and human potential—a curatorial parallel to helping talented people find where they belong.',
+		source: 'https://commons.wikimedia.org/wiki/File:Raphael_School_of_Athens.jpg',
+		context: 'https://www.museivaticani.va/content/museivaticani/en/collezioni/musei/stanze-di-raffaello/stanza-della-segnatura/scuola-di-atene.html',
+		credit: 'Public-domain reproduction via Wikimedia Commons.'
 	},
 	'indie-campers': {
-		image: '/images/exhibition/indie-departure.webp',
-		position: '55% 50%',
-		mobilePosition: '76% 50%',
-		title: 'Meeting of the Betrothed Couple and the Departure of the Pilgrims',
-		artist: 'Vittore Carpaccio',
-		year: '1495',
-		collection: 'Gallerie dell’Accademia, Venice',
-		connection: 'Farewells, preparations, and the anticipation of setting off together. The historical subject is a pilgrimage, used here as a metaphor for journeys—not modern holidays.',
-		source: 'https://commons.wikimedia.org/wiki/File:Accademia_-_Incontro_e_partenza_dei_fidanzati_-_Vittore_Carpaccio.jpg',
-		context: 'https://mediaguide.staatsgalerie.de/en/carpaccio/leave-taking-betrothed-pair/',
-		credit: 'Photograph: Didier Descouens, via Wikimedia Commons.',
-		license: 'CC BY-SA 4.0',
-		licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
-		changes: 'Resized to 2560px wide and converted to WebP; displayed with responsive cropping and a dark readability overlay. This image derivative is also licensed CC BY-SA 4.0; this license does not apply to the website code.'
+		...publicDomain,
+		image: '/images/exhibition/indie-birth-of-venus.webp',
+		position: '50% 48%',
+		mobilePosition: '59% 50%',
+		title: 'The Birth of Venus',
+		artist: 'Sandro Botticelli',
+		year: 'c. 1485',
+		collection: 'Uffizi Galleries, Florence',
+		connection: 'Sea, wind, and arrival on a new shore. Venus’s arrival in Cyprus becomes a poetic parallel to travel, discovery, and the freedom to begin a new journey.',
+		source: 'https://commons.wikimedia.org/wiki/File:Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg',
+		context: 'https://www.uffizi.it/en/artworks/birth-of-venus',
+		credit: 'Google Art Project reproduction via Wikimedia Commons; levels-adjusted source version by Dcoetzee.'
 	},
 	tenzo: {
-		image: '/images/exhibition/tenzo-wedding.webp',
-		position: '50% 53%',
-		mobilePosition: '64% 50%',
-		title: 'The Peasant Wedding',
-		artist: 'Pieter Bruegel the Elder',
-		year: 'c. 1567',
-		collection: 'Kunsthistorisches Museum, Vienna',
-		connection: 'The choreography behind a shared meal: serving, gathering, and hospitality. A curatorial parallel to the restaurant operations Tenzo supports.',
-		source: 'https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_Peasant_Wedding_-_Google_Art_Project_2.jpg',
-		context: 'https://smarthistory.org/pieter-bruegel-the-elder-peasant-wedding/',
-		credit: 'Reproduction via Google Art Project / Wikimedia Commons.',
-		license: 'Public domain (PD-Art)',
-		licenseUrl: 'https://creativecommons.org/publicdomain/mark/1.0/',
-		changes: 'Resized to 2400px wide and converted to WebP; displayed with responsive cropping and a dark readability overlay.'
+		...publicDomain,
+		image: '/images/exhibition/tenzo-wedding-at-cana.webp',
+		position: '50% 57%',
+		mobilePosition: '57% 50%',
+		title: 'The Wedding Feast at Cana',
+		artist: 'Paolo Veronese',
+		year: '1562–1563',
+		collection: 'Musée du Louvre, Paris',
+		connection: 'An extraordinary feast, made possible by the people behind it. A curatorial parallel to hospitality and the coordination that makes every service feel effortless.',
+		source: 'https://commons.wikimedia.org/wiki/File:Paolo_Veronese_008.jpg',
+		context: 'https://collections.louvre.fr/en/ark:/53355/cl010064382',
+		credit: 'Public-domain reproduction via Wikimedia Commons; photographer unknown. The source metadata credits Gallerix.ru.'
 	}
 };
