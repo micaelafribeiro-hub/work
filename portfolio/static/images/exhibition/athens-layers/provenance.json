@@ -1,0 +1,16 @@
+{
+  "source": "../cord-school-of-athens.webp",
+  "sourceDimensions": [2560, 1672],
+  "mode": "Built-in image_gen tool; no CLI/API fallback",
+  "usage": "The original painting supplies both visible layers. The generated clean plate only fills disoccluded areas. The matte is thresholded and expanded by five source pixels at render time, with a solid lower-floor region; each finished layer only translates as a rigid plane.",
+  "assets": [
+    {
+      "file": "clean-plate.png",
+      "prompt": "Use case: precise-object-edit. Input image 1 is the edit target, Raphael's School of Athens. Create one aligned clean background plate for layered parallax compositing. Remove ONLY all the living human figures, their handheld objects, and the small isolated writing desk at lower center. Reconstruct the stone steps, floor, and architecture hidden behind these people. KEEP the two stone statues, surrounding vaults, wall reliefs, columns, all visible architectural boundaries, and the original perspective exactly unchanged. Keep the exact full original framing, image aspect ratio, scale, camera, architecture positions, fresco texture, fine detail and muted original colors. Do not zoom, crop, add ornaments, restyle, brighten, or change the composition. This is a faithful restoration/inpainting layer, not a new interpretation of the painting. No people or ghost silhouettes should remain. Output the same complete landscape composition with plausible empty stairs and floor where the people were, high resolution."
+    },
+    {
+      "file": "foreground-matte.png",
+      "prompt": "Use case: background-extraction. Input image 1 is the exact edit target. Produce ONLY a precise BLACK AND WHITE segmentation matte, aligned to the complete input image without any resizing of composition, recropping or shifting. Same full image aspect ratio and framing. White (#ffffff): ALL living human figures (including heads, hair, hats, hands, clothing, books and held objects), AND ALL the lower steps and foreground floor below and between those figures, AND the left and right foreground stone plinths at the bottom. This makes a mostly contiguous solid white lower foreground band with its top boundary tracing the uppermost human silhouettes and raised hands in exact original positions. Black (#000000): ALL upper background architecture, niches and their two stone statues, archways, columns, reliefs and sky above/behind the people. The white foreground silhouette must closely and accurately trace every topmost head, hat and raised hand, following the people-architecture edge rather than an approximate horizontal dividing line. No internal texture or shading whatsoever: completely solid white foreground, completely solid black background. Only a 1px antialias edge. No depiction of the artwork itself, no gray gradients, no labels. It is an accurate compositing selection mask, NOT a depth map and NOT an illustration. Preserve exact coordinates of the source silhouettes."
+    }
+  ]
+}

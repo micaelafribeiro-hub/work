@@ -1,112 +1,152 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { createPaintingDepth } from '$lib/painting-depth';
 
 	let { src, active }: { src: string; active: boolean } = $props();
-	let canvas: HTMLCanvasElement;
+	const id = $props.id();
+	const plate = '/images/exhibition/athens-layers/clean-plate.png';
+	const matte = '/images/exhibition/athens-layers/foreground-matte.png';
+	let scene: HTMLDivElement;
+	let rear: HTMLDivElement;
+	let front: HTMLDivElement;
 	let ready = $state(false);
 	let refresh: (() => void) | undefined;
 	$effect(() => { if (active) refresh?.(); });
 
 	onMount(() => {
 		const motion = matchMedia('(prefers-reduced-motion: reduce)');
-		const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
-		const image = new Image();
-		let renderer: ReturnType<typeof createPaintingDepth> = null;
+		const pointerMedia = matchMedia('(hover: hover) and (pointer: fine)');
 		let disposed = false;
+		let loaded = false;
 		let frame = 0;
 		let previousTime = 0;
-		let x = 0, y = 0, targetX = 0, targetY = 0;
-		let scrollDrift = 0;
+		let x = 0, y = 0, targetX = 0, targetY = 0, drift = 0;
 		const clamp = (value: number) => Math.max(-1, Math.min(1, value));
 		const stop = () => { cancelAnimationFrame(frame); frame = 0; previousTime = 0; };
+		// Each layer receives one rigid translation: no displacement map,
+		// per-pixel deformation, tilt, or animated scaling.
+		const paint = () => {
+			rear.style.transform = `translate3d(${(x * 2).toFixed(3)}px, ${(y * 1.2).toFixed(3)}px, 0)`;
+			front.style.transform = `translate3d(${(x * 10).toFixed(3)}px, ${(y * 6).toFixed(3)}px, 0)`;
+		};
 		const draw = (time: number) => {
 			frame = 0;
-			if (!renderer || motion.matches || !active || document.hidden) return;
-			const delta = previousTime ? Math.min(time - previousTime, 64) : 16;
+			if (!ready || !active || motion.matches || document.hidden) { previousTime = 0; return; }
+			const elapsed = previousTime ? Math.min(time - previousTime, 64) : 16;
 			previousTime = time;
-			const ease = 1 - Math.exp(-delta / 160);
-			const nextY = targetY + scrollDrift;
+			const ease = 1 - Math.exp(-elapsed / 180);
+			const nextY = clamp(targetY + drift);
 			x += (targetX - x) * ease;
 			y += (nextY - y) * ease;
-			if (Math.abs(targetX - x) + Math.abs(nextY - y) < .000015) {
+			if (Math.abs(targetX - x) + Math.abs(nextY - y) < .0005) {
 				x = targetX; y = nextY; previousTime = 0;
 			} else frame = requestAnimationFrame(draw);
-			renderer.draw(x, y);
+			paint();
 		};
 		const requestDraw = () => {
-			if (!frame && renderer && active && !motion.matches && !document.hidden) frame = requestAnimationFrame(draw);
+			if (!frame && ready && active && !motion.matches && !document.hidden) frame = requestAnimationFrame(draw);
 		};
 		const readScroll = () => {
-			// Touch uses ordinary page scrolling, never device-orientation access.
-			scrollDrift = clamp(window.scrollY / Math.max(innerHeight * .55, 1)) * (finePointer.matches ? .012 : .007);
+			drift = clamp(scrollY / Math.max(innerHeight * .55, 1)) * .6;
 			requestDraw();
 		};
 		const resize = () => {
-			if (!renderer) return;
-			renderer.resize(canvas.clientWidth, canvas.clientHeight, innerWidth <= 760);
+			// One shared source coordinate system keeps masks registered on mobile.
+			const width = scene.clientWidth, height = scene.clientHeight;
+			const scale = Math.max(width / 2560, height / 1672);
+			scene.style.setProperty('--art-width', `${2560 * scale}px`);
+			scene.style.setProperty('--art-height', `${1672 * scale}px`);
+			scene.style.setProperty('--art-left', `${(width - 2560 * scale) * .5}px`);
+			scene.style.setProperty('--art-top', `${(height - 1672 * scale) * (innerWidth <= 760 ? .5 : .6)}px`);
 			readScroll();
-			requestDraw();
-		};
-		const setup = () => {
-			if (disposed || motion.matches || !image.complete || !image.naturalWidth) return;
-			if (!renderer) renderer = createPaintingDepth(canvas, image);
-			if (!renderer) return;
-			resize();
-			renderer.draw(x, y);
-			ready = true;
 		};
 		const preference = () => {
-			stop();
-			x = y = targetX = targetY = scrollDrift = 0;
-			if (motion.matches) { ready = false; renderer?.dispose(); renderer = null; }
-			else setup();
+			stop(); x = y = targetX = targetY = drift = 0; paint();
+			ready = loaded && !motion.matches;
+			resize();
 		};
 		const pointer = (event: PointerEvent) => {
-			if (!active || motion.matches || !finePointer.matches || event.pointerType !== 'mouse') return;
-			targetX = clamp(event.clientX / innerWidth * 2 - 1) * .016;
-			targetY = clamp(event.clientY / innerHeight * 2 - 1) * .010;
+			if (!active || !ready || !pointerMedia.matches || event.pointerType !== 'mouse') return;
+			targetX = clamp(event.clientX / innerWidth * 2 - 1);
+			targetY = clamp(event.clientY / innerHeight * 2 - 1) * .65;
 			requestDraw();
 		};
 		const rest = () => { targetX = targetY = 0; requestDraw(); };
 		const visibility = () => { if (document.hidden) stop(); else { rest(); readScroll(); } };
-		const contextLost = (event: Event) => {
-			event.preventDefault(); stop(); ready = false; renderer?.dispose(); renderer = null;
-		};
 		const observer = new ResizeObserver(resize);
-		observer.observe(canvas);
+		observer.observe(scene);
 		refresh = () => { rest(); readScroll(); };
-		image.onload = setup;
-		image.src = src;
+		const images = [src, plate, matte].map((url) => {
+			const image = new Image(); image.src = url; return image;
+		});
+		Promise.all(images.map((image) => image.decode())).then(() => {
+			if (disposed) return;
+			loaded = true;
+			preference();
+		}).catch(() => { /* Keep the original static painting if an asset fails. */ });
 		motion.addEventListener('change', preference);
-		finePointer.addEventListener('change', preference);
+		pointerMedia.addEventListener('change', preference);
 		window.addEventListener('pointermove', pointer, { passive: true });
 		window.addEventListener('scroll', readScroll, { passive: true });
 		window.addEventListener('blur', rest);
 		document.documentElement.addEventListener('pointerleave', rest);
 		document.addEventListener('visibilitychange', visibility);
-		canvas.addEventListener('webglcontextlost', contextLost);
-		canvas.addEventListener('webglcontextrestored', setup);
 		return () => {
-			disposed = true; refresh = undefined; stop(); observer.disconnect(); renderer?.dispose();
-			image.onload = null;
+			disposed = true; refresh = undefined; stop(); observer.disconnect();
 			motion.removeEventListener('change', preference);
-			finePointer.removeEventListener('change', preference);
+			pointerMedia.removeEventListener('change', preference);
 			window.removeEventListener('pointermove', pointer);
 			window.removeEventListener('scroll', readScroll);
 			window.removeEventListener('blur', rest);
 			document.documentElement.removeEventListener('pointerleave', rest);
 			document.removeEventListener('visibilitychange', visibility);
-			canvas.removeEventListener('webglcontextlost', contextLost);
-			canvas.removeEventListener('webglcontextrestored', setup);
 		};
 	});
 </script>
 
-<canvas bind:this={canvas} class:ready aria-hidden="true" data-painting-depth="athens"></canvas>
+<div bind:this={scene} class="depth-scene" class:ready aria-hidden="true" data-painting-depth="rigid-layers">
+	<svg class="mask-definitions" aria-hidden="true">
+		<defs>
+			<filter id={`${id}-edge`} x="-1%" y="-1%" width="102%" height="102%" color-interpolation-filters="sRGB">
+				<feComponentTransfer>
+					<feFuncR type="linear" slope="20" intercept="-10" />
+					<feFuncG type="linear" slope="20" intercept="-10" />
+					<feFuncB type="linear" slope="20" intercept="-10" />
+				</feComponentTransfer>
+				<feMorphology operator="dilate" radius="5" />
+			</filter>
+			<filter id={`${id}-inverse`} color-interpolation-filters="sRGB">
+				<feComponentTransfer>
+					<feFuncR type="linear" slope="-1" intercept="1" />
+					<feFuncG type="linear" slope="-1" intercept="1" />
+					<feFuncB type="linear" slope="-1" intercept="1" />
+				</feComponentTransfer>
+			</filter>
+			<g id={`${id}-silhouette`}>
+				<image href={matte} width="2560" height="1672" preserveAspectRatio="none" filter={`url(#${id}-edge)`} />
+				<rect x="0" y="1003" width="2560" height="669" fill="white" />
+			</g>
+			<mask id={`${id}-foreground`} maskUnits="userSpaceOnUse" x="0" y="0" width="2560" height="1672" style="mask-type:luminance">
+				<use href={`#${id}-silhouette`} />
+			</mask>
+			<mask id={`${id}-background`} maskUnits="userSpaceOnUse" x="0" y="0" width="2560" height="1672" style="mask-type:luminance">
+				<use href={`#${id}-silhouette`} filter={`url(#${id}-inverse)`} />
+			</mask>
+		</defs>
+	</svg>
+	<div bind:this={rear} class="layer rear" data-depth-layer="architecture">
+		<img class="art" src={plate} alt="" draggable="false" />
+		<svg class="art" viewBox="0 0 2560 1672"><image href={src} width="2560" height="1672" mask={`url(#${id}-background)`} /></svg>
+	</div>
+	<div bind:this={front} class="layer front" data-depth-layer="figures">
+		<svg class="art" viewBox="0 0 2560 1672"><image href={src} width="2560" height="1672" mask={`url(#${id}-foreground)`} /></svg>
+	</div>
+</div>
 
 <style>
-	canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
-	canvas.ready { opacity: 1; transition: opacity .6s ease; }
-	@media (prefers-reduced-motion: reduce) { canvas { display: none; transition: none; } }
+	.depth-scene { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+	.depth-scene.ready { opacity: 1; transition: opacity .4s ease; }
+	.layer { position: absolute; inset: 0; will-change: transform; }
+	.mask-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
+	.art { position: absolute; left: var(--art-left); top: var(--art-top); width: var(--art-width); height: var(--art-height); max-width: none; }
+	@media (prefers-reduced-motion: reduce) { .depth-scene { display: none; transition: none; } }
 </style>
