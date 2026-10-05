@@ -9,39 +9,61 @@
     body { display: grid; place-items: center; }
     main { position: relative; width: min(100vw, calc(100svh * 1569 / 1003)); aspect-ratio: 1569 / 1003; overflow: hidden; container-type: inline-size; isolation: isolate; }
     img { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; user-select: none; }
-    .figure { transition: transform .6s ease; will-change: transform; }
+    .figure { will-change: transform; }
     /* One broad, warm shadow per real alpha layer. No hard contact outline.
        Container units keep the softness proportional to the painting. */
     .sides { filter: drop-shadow(.2cqw .6cqw .9cqw rgb(32 28 20 / .22)); }
     .venus { filter: drop-shadow(.35cqw .85cqw 1.15cqw rgb(32 28 20 / .28)); }
-    @media (prefers-reduced-motion: reduce) { .figure { transition: none; transform: none !important; will-change: auto; } }
+    @media (prefers-reduced-motion: reduce) { .figure { transform: none !important; will-change: auto; } }
   </style>
 </head>
 <body>
   <main role="img" aria-label="A layered reinterpretation of The Birth of Venus, with softly shadowed figures above the landscape.">
-    <img src="/layers/background.png" alt="" draggable="false">
-    <img class="figure sides" src="/layers/side-figures.png" alt="" draggable="false">
-    <img class="figure venus" src="/layers/venus-shell.png" alt="" draggable="false">
+    <img src="/layers/background.webp" alt="" draggable="false">
+    <img class="figure sides" src="/layers/side-figures.webp" alt="" draggable="false">
+    <img class="figure venus" src="/layers/venus-shell.webp" alt="" draggable="false">
   </main>
   <script>
+    // Same motion model as the gallery's PaintingDepth: one rigid translation
+    // per layer, eased toward the pointer with a frame-rate independent decay.
     const stage = document.querySelector('main');
     const figures = [...document.querySelectorAll('.figure')];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const fine = matchMedia('(hover: hover) and (pointer: fine)');
-    const rest = () => figures.forEach(image => image.style.transform = 'translate(0, 0)');
+    const rates = [[3, 2], [6, 4]]; // source px at full deflection: sides, Venus
+    const clamp = n => Math.max(-1, Math.min(1, n));
+    let x = 0, y = 0, targetX = 0, targetY = 0, frame = 0, previous = 0;
+    const paint = () => {
+      const scale = stage.clientWidth / 1569;
+      figures.forEach((image, i) => image.style.transform =
+        `translate3d(${(x * rates[i][0] * scale).toFixed(3)}px, ${(y * rates[i][1] * scale).toFixed(3)}px, 0)`);
+    };
+    const draw = time => {
+      frame = 0;
+      const delta = previous ? Math.min(time - previous, 64) : 16;
+      previous = time;
+      const ease = 1 - Math.exp(-delta / 180);
+      x += (targetX - x) * ease; y += (targetY - y) * ease;
+      if (Math.abs(targetX - x) + Math.abs(targetY - y) < .0005) { x = targetX; y = targetY; previous = 0; }
+      else frame = requestAnimationFrame(draw);
+      paint();
+    };
+    const request = () => { if (!frame && !document.hidden) frame = requestAnimationFrame(draw); };
+    const rest = () => { targetX = targetY = 0; request(); };
     addEventListener('pointermove', event => {
       if (reduced.matches || !fine.matches || event.pointerType !== 'mouse') return;
       const bounds = stage.getBoundingClientRect();
-      const clamp = n => Math.max(-1, Math.min(1, n));
-      const x = clamp((event.clientX - bounds.left) / bounds.width * 2 - 1);
-      const y = clamp((event.clientY - bounds.top) / bounds.height * 2 - 1);
-      const scale = bounds.width / 1569;
-      figures.forEach((image, i) => image.style.transform = `translate(${x * (i + 1) * 3 * scale}px, ${y * (i + 1) * 2 * scale}px)`);
+      targetX = clamp((event.clientX - bounds.left) / bounds.width * 2 - 1);
+      targetY = clamp((event.clientY - bounds.top) / bounds.height * 2 - 1);
+      request();
     }, { passive: true });
+    addEventListener('resize', paint);
     addEventListener('blur', rest);
     document.documentElement.addEventListener('pointerleave', rest);
-    reduced.addEventListener('change', rest);
-    fine.addEventListener('change', rest);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(frame); frame = previous = 0; } else rest(); });
+    const preference = () => { cancelAnimationFrame(frame); frame = previous = 0; x = y = targetX = targetY = 0; paint(); };
+    reduced.addEventListener('change', preference);
+    fine.addEventListener('change', preference);
   </script>
 </body>
 </html>

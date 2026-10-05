@@ -5,9 +5,9 @@ import { createReadStream } from 'node:fs';
 
 const routes = new Map([
   ['/', ['index.html', 'text/html; charset=utf-8']],
-  ['/layers/background.png', ['layers/background.png', 'image/png']],
-  ['/layers/side-figures.png', ['layers/side-figures.png', 'image/png']],
-  ['/layers/venus-shell.png', ['layers/venus-shell.png', 'image/png']]
+  ['/layers/background.webp', ['layers/background.webp', 'image/webp']],
+  ['/layers/side-figures.webp', ['layers/side-figures.webp', 'image/webp']],
+  ['/layers/venus-shell.webp', ['layers/venus-shell.webp', 'image/webp']]
 ]);
 
 const server = http.createServer((request, response) => {
@@ -20,5 +20,6 @@ const server = http.createServer((request, response) => {
   stream.pipe(response);
 });
 
-server.listen(5188, '127.0.0.1', () => console.log('Venus depth preview: http://127.0.0.1:5188/'));
+const port = Number(process.env.PORT) || 5188;
+server.listen(port, '127.0.0.1', () => console.log(`Venus depth preview: http://127.0.0.1:${port}/`));
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => server.close(() => process.exit(0)));
