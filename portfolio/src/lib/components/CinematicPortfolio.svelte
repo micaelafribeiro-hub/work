@@ -43,7 +43,7 @@
 		<div class="registration" aria-hidden="true"><i></i><i></i><i></i><i></i><span>✦</span></div>
 		<header class="masthead">
 			<a class="signature" href="/" aria-label="Micaela Ribeiro home">micaela<span>®</span></a>
-			<span class="discipline">Product designer & digital curator</span>
+			<span class="discipline">Product designer</span>
 			<a class="contact" href="mailto:micaela.f.ribeiro@gmail.com">Let’s talk <span>↗</span></a>
 		</header>
 
@@ -78,7 +78,7 @@
 
 <style>
 	:global(.home-route:has(.cinema)){max-width:none;width:100%}
-	.cinema{height:520svh;color:#f5f3e9;background:#073bdb;--serif:"Instrument Serif",Georgia,serif;--mono:"DM Mono",monospace}
+	.cinema{height:520svh;color:#f5f3e9;background:#073bdb;--serif:var(--font-sans);--mono:"DM Mono",monospace}
 	.screen{height:100svh;position:sticky;top:0;overflow:hidden;isolation:isolate}
 	.scene-canvas,.art-fallback,.mobile-shade{position:absolute;inset:0;width:100%;height:100%}.art-fallback{background:#073bdb url('/images/stage/curtain.webp') center/cover no-repeat}.scene-canvas{opacity:0;transition:opacity .8s}.loaded .scene-canvas{opacity:1}
 	.masthead{position:absolute;z-index:20;top:0;left:0;right:0;padding:27px 4vw;display:flex;align-items:center;justify-content:space-between}.signature{font:600 30px/1 var(--font-sans);letter-spacing:-2px}.signature span{font:10px var(--font-sans);vertical-align:super;margin-left:5px;letter-spacing:0}.discipline,.contact{font:10px var(--mono);letter-spacing:.06em}.contact{display:flex;gap:22px;padding:8px 12px;background:#131923;color:#fff;text-transform:uppercase}
