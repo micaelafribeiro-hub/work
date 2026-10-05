@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CinematicPortfolio from '$lib/components/CinematicPortfolio.svelte';
+	import GalleryPortfolio from '$lib/components/GalleryPortfolio.svelte';
 </script>
 
 <svelte:head>
@@ -7,4 +7,4 @@
 	<meta name="description" content="An interactive portfolio by Micaela Ribeiro — product design as digital curation." />
 </svelte:head>
 
-<CinematicPortfolio />
+<GalleryPortfolio />
