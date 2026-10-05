@@ -114,17 +114,5 @@
 	.backdrop{background-position:var(--art-position)}
 	@media(max-width:760px){.backdrop{background-position:var(--art-mobile-position)}.project-caption{bottom:155px}.about{top:145px;bottom:auto}.grid-mode .project-caption{bottom:145px}.grid-mode .about{top:145px;bottom:auto}.grid-mode .tile-track{padding-bottom:360px}}
 	@media(max-height:650px) and (max-width:760px){.gallery{--tile:150px}.project-caption{bottom:135px}.project-caption .category{display:none}.project-caption h1{font-size:26px}.about{top:125px}.grid-mode .about{top:125px}}
-	/* A portrait exhibition recess. The wall and frame remain stationary;
-	   only the artwork's rigid internal planes respond to the viewer. */
-	.gallery{--tile:clamp(200px,20vw,280px);background:#191b18}
-	.gallery::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 43% 7%,#51524740,transparent 62%),linear-gradient(115deg,#292c26,#151714 72%)}
-	.backdrops{inset:4svh auto 4svh 50%;width:min(54vw,68svh);transform:translateX(-50%);border:1px solid #79756842;box-shadow:0 1px 0 #c0b39724,0 0 0 8px #10120f,0 0 0 9px #77746624,12px 18px 38px #0008,30px 45px 100px #0005}
-	.backdrops::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 10px 12px 20px #080a0761,inset -5px -6px 12px #080a0738;background:linear-gradient(135deg,#f9edd10b,transparent 32%,transparent 75%,#090b0726)}
-	.veil{background:linear-gradient(180deg,#17181014,transparent 35%,#12140f38),linear-gradient(90deg,#16171114,transparent 22%,transparent 80%,#16171121)}
-	.project-tile{box-shadow:0 2px 3px #0002,0 15px 35px #070a0840,0 35px 70px #070a0830}
-	@media(max-width:1000px) and (min-width:761px){.backdrops{width:min(55vw,68svh)}.gallery{--tile:220px}}
-	@media(max-width:760px){.gallery{--tile:min(52vw,230px)}.counter{top:160px}.backdrops{inset:185px auto 285px 50%;width:min(84vw,calc((100svh - 470px)*.74));box-shadow:0 0 0 5px #10120f,0 0 0 6px #77746624,8px 14px 25px #0006}.backdrops::after{box-shadow:inset 6px 8px 12px #080a0750,inset -3px -4px 8px #080a0730}.gallery:not(.grid-mode) .project-tile:not(.in-focus){opacity:0}}
-	@media(max-height:740px) and (max-width:760px){.backdrops{top:155px;bottom:240px;width:min(84vw,calc((100svh - 395px)*.74))}.gallery{--tile:145px}.counter{top:130px}}
-	@media(max-height:600px) and (max-width:760px){.backdrops{top:145px;bottom:195px;width:min(84vw,calc((100svh - 340px)*.74))}.gallery{--tile:125px}.gallery:not(.grid-mode) .project-tile{padding:11px}.gallery:not(.grid-mode) :is(.cross,.image-label){display:none}.placeholder-top{font-size:7px}.placeholder-bottom{font-size:6px}}
 	@media(prefers-reduced-motion:reduce){.backdrop,.project-tile{transition:none;transform:none}.caption-content{animation:none}}
 </style>

@@ -25,9 +25,8 @@
 		// Each layer receives one rigid translation: no displacement map,
 		// per-pixel deformation, tilt, or animated scaling.
 		const paint = () => {
-			const strength = innerWidth <= 760 ? .6 : 1;
-			rear.style.transform = `translate3d(${(x * strength).toFixed(3)}px, ${(y * 1.8 * strength).toFixed(3)}px, 0)`;
-			front.style.transform = `translate3d(${(x * 4 * strength).toFixed(3)}px, ${(y * 12 * strength).toFixed(3)}px, 0)`;
+			rear.style.transform = `translate3d(${(x * 2).toFixed(3)}px, ${(y * 1.2).toFixed(3)}px, 0)`;
+			front.style.transform = `translate3d(${(x * 10).toFixed(3)}px, ${(y * 6).toFixed(3)}px, 0)`;
 		};
 		const draw = (time: number) => {
 			frame = 0;
@@ -47,7 +46,7 @@
 			if (!frame && ready && active && !motion.matches && !document.hidden) frame = requestAnimationFrame(draw);
 		};
 		const readScroll = () => {
-			drift = clamp(scrollY / Math.max(innerHeight * .55, 1)) * .9;
+			drift = clamp(scrollY / Math.max(innerHeight * .55, 1)) * .6;
 			requestDraw();
 		};
 		const resize = () => {
@@ -68,7 +67,7 @@
 		const pointer = (event: PointerEvent) => {
 			if (!active || !ready || !pointerMedia.matches || event.pointerType !== 'mouse') return;
 			targetX = clamp(event.clientX / innerWidth * 2 - 1);
-			targetY = clamp(event.clientY / innerHeight * 2 - 1) * .85;
+			targetY = clamp(event.clientY / innerHeight * 2 - 1) * .65;
 			requestDraw();
 		};
 		const rest = () => { targetX = targetY = 0; requestDraw(); };
