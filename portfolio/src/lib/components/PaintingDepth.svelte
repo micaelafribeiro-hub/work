@@ -27,7 +27,9 @@
 		const stop = () => { cancelAnimationFrame(frame); frame = 0; previousTime = 0; };
 		const paint = () => {
 			// A single rigid translation per plane. Never deform artwork pixels.
-			const rates = [[1, .7], [4, 2.8], [10, 6]];
+			// Keep adjacent planes within 1.5px horizontally / 1px vertically.
+			// Wider separation exposes the matte/reconstruction boundary.
+			const rates = [[1, .7], [2, 1.4], [3.5, 2.4]];
 			planes.forEach((plane, i) => {
 				if (plane) plane.style.transform = `translate3d(${(x * rates[i][0]).toFixed(3)}px, ${(y * rates[i][1]).toFixed(3)}px, 0)`;
 			});
@@ -115,7 +117,6 @@
 			<defs>
 				<filter id={`${id}-foreground-select`} color-interpolation-filters="sRGB">
 					<feComponentTransfer><feFuncR type="linear" slope="20" intercept="-15" /><feFuncG type="linear" slope="20" intercept="-15" /><feFuncB type="linear" slope="20" intercept="-15" /></feComponentTransfer>
-					<feMorphology operator="dilate" radius="2" />
 				</filter>
 				<filter id={`${id}-far-select`} color-interpolation-filters="sRGB">
 					<feComponentTransfer><feFuncR type="linear" slope="-20" intercept="5" /><feFuncG type="linear" slope="-20" intercept="5" /><feFuncB type="linear" slope="-20" intercept="5" /></feComponentTransfer>
@@ -169,10 +170,7 @@
 	.layer { position: absolute; inset: 0; will-change: transform; }
 	.mask-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
 	.art { position: absolute; left: var(--art-left); top: var(--art-top); width: var(--art-width); height: var(--art-height); max-width: none; }
-	/* Shadows follow the cutout silhouettes and fall onto the planes behind,
-	   not onto a frame or UI. Farther separation gives a softer penumbra. */
-	.middle .art { filter: drop-shadow(2px 4px 7px rgb(24 19 11 / .16)); }
-	.foreground .art { filter: drop-shadow(2px 5px 5px rgb(24 19 11 / .24)) drop-shadow(0 1px 1px rgb(18 14 8 / .12)); }
-	@media (max-width: 760px) { .middle .art { filter: drop-shadow(1px 2px 4px rgb(24 19 11 / .12)); } .foreground .art { filter: drop-shadow(1px 3px 3px rgb(24 19 11 / .2)); } }
+	/* Preserve the painting's own lighting. Added silhouette shadows make
+	   the depth masks read as paper cutouts, even when the scene is still. */
 	@media (prefers-reduced-motion: reduce) { .depth-scene { display: none; transition: none; } }
 </style>

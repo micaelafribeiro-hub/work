@@ -7,7 +7,7 @@ const publicDomain = {
 	changes: 'Resized to 2560px wide and converted to WebP. Displayed with responsive cropping and a dark readability overlay; no additional colour grading.'
 };
 
-const layeredDisplay = `${publicDomain.changes} Optional parallax separates the original reproduction into three rigid planes, with soft simulated shadows behind the foreground and middle cutouts. AI-assisted segmentation and reconstructed hidden backgrounds fill the small areas revealed between planes. Original source files are unchanged; reduced-motion mode shows the original still.`;
+const layeredDisplay = `${publicDomain.changes} Optional parallax separates the original reproduction into three rigid planes, preserving the painting's own lighting without added silhouette shadows. AI-assisted segmentation and reconstructed hidden backgrounds fill the small areas revealed between planes. Original source files are unchanged; reduced-motion mode shows the original still.`;
 
 export const galleryArtworks = {
 	cord: {
