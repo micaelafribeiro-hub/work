@@ -1,10 +1,10 @@
 <script lang="ts">
-	import GalleryWorld from '$lib/components/GalleryWorld.svelte';
+	import LivingCatalogue from '$lib/components/LivingCatalogue.svelte';
 </script>
 
 <svelte:head>
 	<title>Micaela Ribeiro · Curator of digital spaces</title>
-	<meta name="description" content="Move through a digital exhibition of products, systems and experiences curated by Micaela Ribeiro." />
+	<meta name="description" content="A living digital catalogue where classical art and future-facing product design meet." />
 </svelte:head>
 
-<GalleryWorld />
+<LivingCatalogue />
